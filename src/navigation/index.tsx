@@ -1,26 +1,21 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import TabNavigation from './TabNavigation';
-import ScreenB from '../container/screenB';
+import AuthenNavigator from './AuthenNavigation';
+import { useSelector, useDispatch } from 'react-redux';
+import type { RootState } from '../store';
+import AppNavigator from './AppNavigation';
 
-const Stack = createNativeStackNavigator();
+const AppNavigation: React.FC = () => {
+  const isLogin = useSelector((state: RootState) => state.auth.isLogin);
 
-const Navigator: React.FC = () => {
+  console.log('loginnn', isLogin);
+
+
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="TabNavigation"
-          component={TabNavigation}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen name="ScreenB" component={ScreenB} />
-      </Stack.Navigator>
+      {isLogin ? <AppNavigator /> : <AuthenNavigator />}
     </NavigationContainer>
   );
 };
 
-export default Navigator;
+export default AppNavigation;

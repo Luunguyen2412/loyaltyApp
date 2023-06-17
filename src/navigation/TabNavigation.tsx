@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { Appearance } from 'react-native-appearance';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import ScreenA from '../container/screenA';
-import ScreenC from '../container/screenC';
+import ScreenA from '../container/Home/screenA';
+import ScreenC from '../container/Home/screenC';
 
 import SvgHome from '../assets/icons/Svg.Home';
 import SvgPages from '../assets/icons/Svg.Pages';
+import colors from '../constants/colors';
 
 const Tab = createBottomTabNavigator();
 
@@ -14,7 +14,7 @@ const TabNavigation: React.FC = () => {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: '#2a2a2a',
+        tabBarActiveTintColor: colors.darkColor,
         tabBarInactiveTintColor: '#d0ccd0',
         tabBarStyle: {
           backgroundColor: 'white',

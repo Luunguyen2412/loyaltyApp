@@ -6,10 +6,13 @@
  */
 
 import React from 'react';
-import { StatusBar, useColorScheme, View } from 'react-native';
+import { StatusBar, useColorScheme, View, LogBox } from 'react-native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
-import Navigator from './src/navigation';
 import 'react-native-gesture-handler';
+import AppNavigation from './src/navigation';
+import { store } from './src/store';
+import { Provider } from 'react-redux';
+LogBox.ignoreAllLogs();
 
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -26,11 +29,13 @@ function App(): JSX.Element {
         flex: 1,
       }}
     >
-      <Navigator />
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
+      <Provider store={store}>
+        <AppNavigation />
+        <StatusBar
+          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+          backgroundColor={backgroundStyle.backgroundColor}
+        />
+      </Provider>
     </View>
   );
 }

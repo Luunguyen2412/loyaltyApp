@@ -1,75 +1,70 @@
-// {
-//   "editor.tabSize": 2,
-//   "editor.detectIndentation": false,
-//   "editor.rulers": [
-//     80
-//   ],
-//   "editor.formatOnSave": true,
-//   "editor.formatOnPaste": true,
-//   "files.eol": "\n",
-//   "files.insertFinalNewline": true,
-//   "todo-tree.general.tags": [
-//     "BUG",
-//     "HACK",
-//     "FIXME",
-//     "TODO",
-//     "XXX",
-//     "START:",
-//     "END:"
-//   ],
-//   "todo-tree.general.tagGroups": {
-//     "PROJECT": [
-//       "START:",
-//       "END:"
-//     ]
-//   },
-//   "todo-tree.highlights.customHighlight": {
-//     "PROJECT": {
-//       "background": "#00ffff",
-//       "type": "text-and-comment",
-//       "hideFromTree": true
-//     },
-//     "TODO": {
-//       "icon": "check",
-//       "type": "line",
-//       "background": "#008000"
-//     },
-//     "FIXME": {
-//       "icon": "tools",
-//       "background": "#ffff00",
-//       "iconColour": "#ffff00"
-//     }
-//   },
-//   "todo-tree.highlights.defaultHighlight": {
-//     "icon": "dash",
-//     "type": "text",
-//     "opacity": 50,
-//     "foreground": "#fff",
-//     "background": "#0000ff",
-//     "iconColour": "#008000"
-//   },
-//   "editor.codeActionsOnSave": {
-//     "source.fixAll.eslint": true
-//   },
-//   "typescript.tsdk": "node_modules\\typescript\\lib"
-// }
-
 {
-  "eslint.alwaysShowStatus": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "prettier.singleQuote": true,
+  "editor.tabSize": 2,
+  "editor.detectIndentation": false,
+  "editor.rulers": [80],
   "editor.formatOnSave": true,
-  "[erb]": {
-    "editor.formatOnSave": true
+  "editor.formatOnPaste": true,
+  "files.eol": "\n",
+  "files.insertFinalNewline": true,
+  "todo-tree.general.tags": [
+    "BUG",
+    "HACK",
+    "FIXME",
+    "TODO",
+    "XXX",
+    "START:",
+    "END:"
+  ],
+  "todo-tree.general.tagGroups": {
+    "PROJECT": ["START:", "END:"]
   },
-  "files.autoSave": "onFocusChange",
+  "todo-tree.highlights.customHighlight": {
+    "PROJECT": {
+      "background": "#00ffff",
+      "type": "text-and-comment",
+      "hideFromTree": true
+    },
+    "TODO": {
+      "icon": "check",
+      "type": "line",
+      "background": "#008000"
+    },
+    "FIXME": {
+      "icon": "tools",
+      "background": "#ffff00",
+      "iconColour": "#ffff00"
+    }
+  },
+  "todo-tree.highlights.defaultHighlight": {
+    "icon": "dash",
+    "type": "text",
+    "opacity": 50,
+    "foreground": "#fff",
+    "background": "#0000ff",
+    "iconColour": "#008000"
+  },
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
-  "typescript.tsdk": "node_modules\\typescript\\lib",
-  "prettier.trailingComma": "none",
-  "javascript.validate.enable": false
+  "typescript.tsdk": "node_modules\\typescript\\lib"
 }
+
+// {
+//   "eslint.alwaysShowStatus": true,
+//   "editor.defaultFormatter": "esbenp.prettier-vscode",
+//   "[javascript]": {
+//     "editor.defaultFormatter": "esbenp.prettier-vscode"
+//   },
+//   "prettier.singleQuote": true,
+//   "editor.formatOnSave": true,
+//   "[erb]": {
+//     "editor.formatOnSave": true
+//   },
+//   "files.autoSave": "onFocusChange",
+//   "editor.codeActionsOnSave": {
+//     "source.fixAll.eslint": true
+//   },
+//   "typescript.tsdk": "node_modules\\typescript\\lib",
+//   "prettier.trailingComma": "none",
+//   "javascript.validate.enable": false
+// }
