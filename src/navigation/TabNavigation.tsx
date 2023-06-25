@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import ScreenA from '../container/Home/screenA';
 import ScreenC from '../container/Home/screenC';
 
 import SvgHome from '../assets/icons/Svg.Home';
 import SvgPages from '../assets/icons/Svg.Pages';
 import colors from '../constants/colors';
+import HomeScreen from '../container/Home';
 
 const Tab = createBottomTabNavigator();
 
@@ -26,8 +26,8 @@ const TabNavigation: React.FC = () => {
       }}
     >
       <Tab.Screen
-        name="ScreenA"
-        component={ScreenA}
+        name="HomeScreen"
+        component={HomeScreen}
         options={{
           tabBarIcon: ({ focused }) => <SvgHome active={focused} />,
           tabBarLabel: 'Home',

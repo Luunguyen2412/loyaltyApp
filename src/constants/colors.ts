@@ -7,7 +7,7 @@ const white20 = 'rgba(255, 255, 255, 0.2)';
 const black = '#000000';
 const white = '#ffffff';
 
-const PRIMARY = 'rgba(255,194,38,1)';
+const PRIMARY = '#567DF4';
 
 const PRIMARY50 = 'rgba(0,136,72,0.5)';
 const PRIMARY70 = 'rgba(0,136,72,0.7)';

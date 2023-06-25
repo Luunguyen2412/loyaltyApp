@@ -1,6 +1,6 @@
 import React from 'react';
 import Colors from '../constants/colors';
-import {Text, View, TouchableOpacity} from 'react-native';
+import { Text, View, TouchableOpacity } from 'react-native';
 
 type MyButtonProps = {
   text: string;
@@ -28,9 +28,9 @@ const MyButton: React.FC = ({
       >
         <Text
           style={{
-            color: Colors.black,
-            fontSize: style.fontSize,
-            fontWeight: style.fontWeight,
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: '500',
           }}
         >
           {text}
