@@ -54,6 +54,9 @@ const ListEmployee: React.FC = ({ navigation }) => {
           borderWidth: 1,
           borderBottomColor: Colors.PRIMARY04,
         }}
+        onPress={() => {
+          navigation.navigate('AddEmployee', { data: item });
+        }}
       >
         <View
           style={{
@@ -69,7 +72,7 @@ const ListEmployee: React.FC = ({ navigation }) => {
               borderRadius: 40,
               backgroundColor: 'gray',
             }}
-            source={{ uri: 'ic_employee' }}
+            // source={{ uri: 'ic_employee' }}
             resizeMode="contain"
           />
         </View>

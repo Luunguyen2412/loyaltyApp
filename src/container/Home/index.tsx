@@ -35,7 +35,7 @@ const HomeScreen: React.FC = ({ navigation }) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <MyHeader nameTitle={'HRM Management'} />
+      {/* <MyHeader nameTitle={'HRM Management'} /> */}
       <View
         style={{
           paddingHorizontal: 20,

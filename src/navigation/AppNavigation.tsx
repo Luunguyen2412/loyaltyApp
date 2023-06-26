@@ -15,8 +15,15 @@ const AppNavigator: React.FC = () => {
       <Stack.Screen
         name="TabNavigation"
         component={TabNavigation}
+        // options={{
+        //   headerShown: false,
+        // }}
         options={{
-          headerShown: false,
+          title: 'Home Management',
+          headerTintColor: Colors.white,
+          headerStyle: {
+            backgroundColor: Colors.PRIMARY,
+          },
         }}
       />
       <Stack.Screen name="ScreenB" component={ScreenB} />

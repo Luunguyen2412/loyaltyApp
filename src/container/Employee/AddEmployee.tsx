@@ -13,14 +13,23 @@ import MyButton from '../../components/MyButton';
 
 let width = Dimensions.get('window').width;
 
-const AddEmployee: React.FC = ({ navigation }) => {
+const AddEmployee: React.FC = ({ navigation, route }) => {
   const [username, setUsername] = useState('');
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
 
+  const { data } = route.params;
+
+  console.log('121212', data.length);
+
+  useEffect(() => {
+    setUsername(data.name);
+    setPhone(data.phone);
+  }, [data]);
+
   const AddEmployee = (username, phone) => {
-    const body = { name: username, phone: phone };
-    console.log('1111', body);
+    // const body = { name: username, phone: phone };
+    // console.log('1111', body);
 
     fetch('http://192.168.1.10:5001/api/contacts', {
       method: 'POST',
@@ -31,7 +40,7 @@ const AddEmployee: React.FC = ({ navigation }) => {
     })
       .then(response => response.json())
       .then(responseData => {
-        console.log('response', responseData);
+        console.log('responseAddContact', responseData);
         navigation.goBack();
       })
       .catch(error => {
@@ -67,8 +76,6 @@ const AddEmployee: React.FC = ({ navigation }) => {
             setPhone(value);
           }}
         />
-
-        {/* <MyTextInput placeholder={'Nhập địa chỉ'} value={address} /> */}
         <View style={{ justifyContent: 'flex-end', alignItems: 'flex-end' }}>
           <MyButton
             style={styles.button}
