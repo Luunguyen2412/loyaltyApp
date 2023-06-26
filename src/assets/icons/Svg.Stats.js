@@ -1,9 +1,9 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import Svg, {Path} from 'react-native-svg';
-import {colors} from '../../constants/colors';
+import Svg, { Path } from 'react-native-svg';
+import { colors } from '../../constants/Colors';
 
-const SvgStats = ({active, size}) => {
+const SvgStats = ({ active, size }) => {
   const theme = 'dark';
   const fill = active
     ? colors.activeTintColor[theme]

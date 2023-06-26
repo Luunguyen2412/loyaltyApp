@@ -5,6 +5,7 @@ import ScreenB from '../container/Home/screenB';
 import EmployeeManagement from '../container/Employee';
 import ListEmployee from '../container/Employee/ListEmployee';
 import AddEmployee from '../container/Employee/AddEmployee';
+import Colors from '../constants/Colors';
 
 const Stack = createNativeStackNavigator();
 
@@ -19,9 +20,39 @@ const AppNavigator: React.FC = () => {
         }}
       />
       <Stack.Screen name="ScreenB" component={ScreenB} />
-      <Stack.Screen name="EmployeeManage" component={EmployeeManagement} />
-      <Stack.Screen name="ListEmployee" component={ListEmployee} />
-      <Stack.Screen name="AddEmployee" component={AddEmployee} />
+      <Stack.Screen
+        name="EmployeeManage"
+        component={EmployeeManagement}
+        options={{
+          title: 'Manage Employee',
+          headerTintColor: Colors.white,
+          headerStyle: {
+            backgroundColor: Colors.PRIMARY,
+          },
+        }}
+      />
+      <Stack.Screen
+        name="ListEmployee"
+        component={ListEmployee}
+        options={{
+          title: 'List Employee',
+          headerTintColor: Colors.white,
+          headerStyle: {
+            backgroundColor: Colors.PRIMARY,
+          },
+        }}
+      />
+      <Stack.Screen
+        name="AddEmployee"
+        component={AddEmployee}
+        options={{
+          title: 'Add Employee',
+          headerTintColor: Colors.white,
+          headerStyle: {
+            backgroundColor: Colors.PRIMARY,
+          },
+        }}
+      />
     </Stack.Navigator>
   );
 };

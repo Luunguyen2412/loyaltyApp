@@ -4,7 +4,7 @@ import ScreenC from '../container/Home/screenC';
 
 import SvgHome from '../assets/icons/Svg.Home';
 import SvgPages from '../assets/icons/Svg.Pages';
-import colors from '../constants/colors';
+import colors from '../constants/Colors';
 import HomeScreen from '../container/Home';
 
 const Tab = createBottomTabNavigator();

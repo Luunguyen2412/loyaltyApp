@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { logOut } from '../Login/reducer';
-import Colors from '../../constants/colors';
+import Colors from '../../constants/Colors';
 import MyHeader from '../../components/MyHeader';
 
 const listModule = [

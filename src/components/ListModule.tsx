@@ -1,5 +1,5 @@
 import React from 'react';
-import Colors from '../constants/colors';
+import Colors from '../constants/Colors';
 import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
 
 // type MyListModuleProps = {

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Button, Text, TouchableOpacity } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { logOut } from '../Login/reducer';
-import Colors from '../../constants/colors';
+import Colors from '../../constants/Colors';
 import MyHeader from '../../components/MyHeader';
 import MyListModule from '../../components/ListModule';
 import MyListFunction from '../../components/ListFunction';
@@ -32,25 +32,6 @@ const listModule = [
 
 const HomeScreen: React.FC = ({ navigation }) => {
   const dispatch = useDispatch();
-
-  const [data, setData] = useState(null);
-
-  useEffect(() => {
-    // fetchData();
-  }, []);
-
-  // const fetchData = () => {
-  //     fetch('http://localhost:3000/api/contacts')
-  //         .then(response => response.json())
-  //         .then(responseData => {
-  //             console.log('response', responseData);
-
-  //             setData(responseData);
-  //         })
-  //         .catch(error => {
-  //             console.error(error);
-  //         });
-  // };
 
   return (
     <View style={{ flex: 1 }}>

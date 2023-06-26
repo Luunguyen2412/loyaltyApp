@@ -1,9 +1,9 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import Svg, {Path} from 'react-native-svg';
-import {colors} from '../../constants/colors';
+import Svg, { Path } from 'react-native-svg';
+import { colors } from '../../constants/Colors';
 
-const SvgHome = ({active, size}) => {
+const SvgHome = ({ active, size }) => {
   const fill = active ? '#2a2a2a' : '#d0ccd0';
 
   return (

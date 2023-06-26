@@ -8,7 +8,7 @@ const black = '#000000';
 const white = '#ffffff';
 
 const PRIMARY = '#567DF4';
-
+const PRIMARY04 = '#9090AD';
 const PRIMARY50 = 'rgba(0,136,72,0.5)';
 const PRIMARY70 = 'rgba(0,136,72,0.7)';
 const PRIMARY30 = 'rgba(0,136,72,0.3)';
@@ -28,6 +28,7 @@ export default {
   PRIMARY50,
   PRIMARY70,
   PRIMARY,
+  PRIMARY04,
   black,
   white20,
   white,

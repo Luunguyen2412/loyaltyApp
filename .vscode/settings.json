@@ -43,28 +43,18 @@
     "background": "#0000ff",
     "iconColour": "#008000"
   },
+  // "eslint.alwaysShowStatus": true,
+  // "editor.defaultFormatter": "esbenp.prettier-vscode",
+  // "[javascript]": {
+  //   "editor.defaultFormatter": "esbenp.prettier-vscode"
+  // },
+  // "prettier.singleQuote": true,
+  // "[erb]": {
+  //   "editor.formatOnSave": true
+  // },
+  // "files.autoSave": "onFocusChange",
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
-  "typescript.tsdk": "node_modules\\typescript\\lib"
+  // "typescript.tsdk": "node_modules\\typescript\\lib"
 }
-
-// {
-//   "eslint.alwaysShowStatus": true,
-//   "editor.defaultFormatter": "esbenp.prettier-vscode",
-//   "[javascript]": {
-//     "editor.defaultFormatter": "esbenp.prettier-vscode"
-//   },
-//   "prettier.singleQuote": true,
-//   "editor.formatOnSave": true,
-//   "[erb]": {
-//     "editor.formatOnSave": true
-//   },
-//   "files.autoSave": "onFocusChange",
-//   "editor.codeActionsOnSave": {
-//     "source.fixAll.eslint": true
-//   },
-//   "typescript.tsdk": "node_modules\\typescript\\lib",
-//   "prettier.trailingComma": "none",
-//   "javascript.validate.enable": false
-// }

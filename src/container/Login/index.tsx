@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Dimensions, Text } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import Colors from '../../constants/colors';
+import Colors from '../../constants/Colors';
 import MyButton from '../../components/MyButton';
 import MyTextInput from '../../components/MyTextInput';
 import { useSelector, useDispatch } from 'react-redux';
