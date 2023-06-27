@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  Dimensions,
-  StyleSheet,
-  TextInput,
-  Alert,
-} from 'react-native';
+import { View, Dimensions, StyleSheet } from 'react-native';
 import Colors from '../../constants/Colors';
 import MyTextInput from '../../components/MyTextInput';
 import MyButton from '../../components/MyButton';
@@ -18,25 +11,16 @@ const AddEmployee: React.FC = ({ navigation, route }) => {
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
 
-  const { data } = route.params;
-
-  console.log('121212', data.length);
-
-  useEffect(() => {
-    setUsername(data.name);
-    setPhone(data.phone);
-  }, [data]);
-
   const AddEmployee = (username, phone) => {
-    // const body = { name: username, phone: phone };
+    const body = {
+      name: username,
+      phone: phone,
+    };
     // console.log('1111', body);
 
     fetch('http://192.168.1.10:5001/api/contacts', {
       method: 'POST',
-      body: JSON.stringify({
-        name: username,
-        phone: phone,
-      }),
+      body: JSON.stringify(body),
     })
       .then(response => response.json())
       .then(responseData => {
@@ -44,20 +28,15 @@ const AddEmployee: React.FC = ({ navigation, route }) => {
         navigation.goBack();
       })
       .catch(error => {
-        console.error(error);
+        console.error('errorrr: ', error);
       });
   };
 
   return (
-    <View
-      style={{
-        flex: 1,
-        paddingHorizontal: 20,
-        backgroundColor: Colors.white,
-      }}
-    >
+    <View style={styles.container}>
       <View
         style={{
+          flex: 8,
           paddingTop: 20,
         }}
       >
@@ -76,19 +55,24 @@ const AddEmployee: React.FC = ({ navigation, route }) => {
             setPhone(value);
           }}
         />
-        <View style={{ justifyContent: 'flex-end', alignItems: 'flex-end' }}>
-          <MyButton
-            style={styles.button}
-            text="Lưu"
-            onPress={() => AddEmployee(username, phone)}
-          />
-        </View>
+      </View>
+      <View style={{ flex: 2, justifyContent: 'center', alignItems: 'center' }}>
+        <MyButton
+          style={styles.button}
+          text="Lưu"
+          onPress={() => AddEmployee(username, phone)}
+        />
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingHorizontal: 20,
+    backgroundColor: Colors.white,
+  },
   button: {
     alignItems: 'center',
     backgroundColor: Colors.PRIMARY,

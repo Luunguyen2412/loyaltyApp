@@ -55,7 +55,7 @@ const ListEmployee: React.FC = ({ navigation }) => {
           borderBottomColor: Colors.PRIMARY04,
         }}
         onPress={() => {
-          navigation.navigate('AddEmployee', { data: item });
+          navigation.navigate('InfoEmployee', { data: item });
         }}
       >
         <View
@@ -107,6 +107,7 @@ const ListEmployee: React.FC = ({ navigation }) => {
               onRefresh={handleRefresh}
             />
           }
+          style={{ paddingVertical: 10 }}
           data={data}
           renderItem={renderItem}
         />

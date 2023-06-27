@@ -6,6 +6,7 @@ import EmployeeManagement from '../container/Employee';
 import ListEmployee from '../container/Employee/ListEmployee';
 import AddEmployee from '../container/Employee/AddEmployee';
 import Colors from '../constants/Colors';
+import InfoEmployee from '../container/Employee/InfoEmployee';
 
 const Stack = createNativeStackNavigator();
 
@@ -54,6 +55,17 @@ const AppNavigator: React.FC = () => {
         component={AddEmployee}
         options={{
           title: 'Add Employee',
+          headerTintColor: Colors.white,
+          headerStyle: {
+            backgroundColor: Colors.PRIMARY,
+          },
+        }}
+      />
+      <Stack.Screen
+        name="InfoEmployee"
+        component={InfoEmployee}
+        options={{
+          title: 'Employee Infomation',
           headerTintColor: Colors.white,
           headerStyle: {
             backgroundColor: Colors.PRIMARY,
