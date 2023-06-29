@@ -3,6 +3,7 @@ import { View, Dimensions, StyleSheet } from 'react-native';
 import Colors from '../../constants/Colors';
 import MyTextInput from '../../components/MyTextInput';
 import MyButton from '../../components/MyButton';
+import { fetchAPI } from '../../constants/ApiConstants';
 
 let width = Dimensions.get('window').width;
 
@@ -11,25 +12,16 @@ const AddEmployee: React.FC = ({ navigation, route }) => {
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
 
-  const AddEmployee = (username, phone) => {
+  const AddEmployee = async (username, phone) => {
     const body = {
       name: username,
       phone: phone,
     };
-    // console.log('1111', body);
-
-    fetch('http://192.168.1.10:5001/api/contacts', {
+    await fetchAPI({
+      url: 'http://192.168.1.10:5001/api/contacts',
+      data: body,
       method: 'POST',
-      body: JSON.stringify(body),
-    })
-      .then(response => response.json())
-      .then(responseData => {
-        console.log('responseAddContact', responseData);
-        navigation.goBack();
-      })
-      .catch(error => {
-        console.error('errorrr: ', error);
-      });
+    });
   };
 
   return (
