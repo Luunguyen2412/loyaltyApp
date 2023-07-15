@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import React, {useState} from 'react';
+import {View, StyleSheet, Dimensions} from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Colors from '../../constants/Colors';
 import MyButton from '../../components/MyButton';
 import MyTextInput from '../../components/MyTextInput';
@@ -8,8 +8,8 @@ import MyTextInput from '../../components/MyTextInput';
 let width = Dimensions.get('window').width;
 
 const SignupScreen: React.FC = () => {
-  const { username, setUsername } = useState('');
-  const { password, setPassword } = useState('');
+  const {username, setUsername} = useState('');
+  const {password, setPassword} = useState('');
 
   return (
     <KeyboardAwareScrollView
@@ -42,7 +42,7 @@ const SignupScreen: React.FC = () => {
           <MyTextInput placeholder="Chọn ngày sinh của bạn" />
           <MyTextInput placeholder="Chọn giới tính của bạn" />
 
-          <View style={{ height: 50 }} />
+          <View style={{height: 50}} />
 
           <MyButton style={styles.SignInButton} text="Tạo tài khoản" />
         </View>

@@ -1,12 +1,12 @@
 import React from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import TabNavigation from './TabNavigation';
-import ScreenB from '../container/Home/screenB';
 import EmployeeManagement from '../container/Employee';
 import ListEmployee from '../container/Employee/ListEmployee';
 import AddEmployee from '../container/Employee/AddEmployee';
 import Colors from '../constants/Colors';
 import InfoEmployee from '../container/Employee/InfoEmployee';
+import OrderScreen from '../container/Order';
 
 const Stack = createNativeStackNavigator();
 
@@ -27,7 +27,6 @@ const AppNavigator: React.FC = () => {
           },
         }}
       />
-      <Stack.Screen name="ScreenB" component={ScreenB} />
       <Stack.Screen
         name="EmployeeManage"
         component={EmployeeManagement}
@@ -66,6 +65,17 @@ const AppNavigator: React.FC = () => {
         component={InfoEmployee}
         options={{
           title: 'Employee Infomation',
+          headerTintColor: Colors.white,
+          headerStyle: {
+            backgroundColor: Colors.PRIMARY,
+          },
+        }}
+      />
+      <Stack.Screen
+        name="OrderScreen"
+        component={OrderScreen}
+        options={{
+          title: 'Order products',
           headerTintColor: Colors.white,
           headerStyle: {
             backgroundColor: Colors.PRIMARY,

@@ -1,26 +1,36 @@
-import React, { useState, useEffect } from 'react';
-import { View, Dimensions, StyleSheet, Alert } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, Dimensions, StyleSheet, Alert} from 'react-native';
 import Colors from '../../constants/Colors';
 import MyTextInput from '../../components/MyTextInput';
 import MyButton from '../../components/MyButton';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import {fetchAPI, urlHost} from '../../constants/ApiConstants';
 
 let width = Dimensions.get('window').width;
 
-const InfoEmployee: React.FC = ({ navigation, route }) => {
+const InfoEmployee: React.FC = ({}) => {
+  const navigation = useNavigation();
+  const route = useRoute();
+
   const [username, setUsername] = useState('');
   const [phone, setPhone] = useState('');
+  const [point, setPoint] = useState();
+  const [membership, setMembership] = useState();
+
   const [userId, setUserId] = useState('');
 
-  const { data } = route.params;
+  const {data} = route.params;
 
   useEffect(() => {
     setUsername(data.name);
     setPhone(data.phone);
+    setPoint(data.point);
+    setMembership(data.membership);
     setUserId(data._id);
   }, [data]);
 
   const RemoveEmployee = idUser => {
-    fetch(`http://192.168.1.10:5001/api/contacts/${idUser}`, {
+    fetch(`${urlHost}/api/contacts/${idUser}`, {
       method: 'DELETE',
     })
       .then(response => response.json())
@@ -31,6 +41,18 @@ const InfoEmployee: React.FC = ({ navigation, route }) => {
       .catch(error => {
         console.error('errorrr: ', error);
       });
+  };
+
+  const getMembershipLevel = () => {
+    if (point >= 2000) {
+      return 'Vàng';
+    } else if (point >= 1000) {
+      return 'Bạc';
+    } else if (point >= 500) {
+      return 'Đồng';
+    } else {
+      return 'Thường';
+    }
   };
 
   return (
@@ -47,20 +69,22 @@ const InfoEmployee: React.FC = ({ navigation, route }) => {
           paddingTop: 20,
         }}
       >
+        <MyTextInput placeholder={'Họ tên'} value={username} editable={false} />
         <MyTextInput
-          placeholder={'Nhập họ tên'}
-          value={username}
-          onChangeText={value => {
-            setUsername(value);
-          }}
+          placeholder={'Số điện thoại'}
+          value={phone}
+          editable={false}
         />
         <MyTextInput
-          placeholder={'Nhập số điện thoại'}
-          value={phone}
-          keyboardType="number-pad"
-          onChangeText={value => {
-            setPhone(value);
-          }}
+          placeholder={'Số điểm'}
+          value={point > 0 ? `${point.toString()} điểm` : '0 điểm'}
+          editable={false}
+        />
+        <MyTextInput
+          placeholder={'Xếp hạng'}
+          // value={membership > 0 ? membership.toString() : 'Thường'}
+          value={getMembershipLevel()}
+          editable={false}
         />
       </View>
       <View
@@ -87,17 +111,17 @@ const InfoEmployee: React.FC = ({ navigation, route }) => {
                 },
                 {
                   text: 'Không',
-                  onPress: () => { },
+                  onPress: () => {},
                 },
               ],
-              { cancelable: false },
+              {cancelable: false},
             );
           }}
         />
         <MyButton
           style={styles.buttonEdit}
           text="Chỉnh sửa"
-          onPress={() => { }}
+          onPress={() => {}}
         />
       </View>
     </View>

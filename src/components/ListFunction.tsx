@@ -1,13 +1,14 @@
 import React from 'react';
 import Colors from '../constants/Colors';
-import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
+import {Text, View, TouchableOpacity, StyleSheet} from 'react-native';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 // type MyListModuleProps = {
 //   nameTitle: string;
 //   navigation: () => void;
 // };
 
-const MyListFunction: React.FC = ({ listFunction, navigation }) => {
+const MyListFunction: React.FC = ({listFunction, navigation}) => {
   return (
     <View style={styles.container}>
       {listFunction.map((ele, index) => {
@@ -17,7 +18,13 @@ const MyListFunction: React.FC = ({ listFunction, navigation }) => {
             style={styles.button}
             onPress={() => navigation.navigate(ele.navigate)}
           >
-            <View style={styles.viewButton} />
+            <View style={styles.viewButton}>
+              <FontAwesome5
+                name={ele.icon}
+                size={30}
+                color={Colors.PRIMARY04}
+              />
+            </View>
             <Text style={styles.text}>{ele.name}</Text>
           </TouchableOpacity>
         );
@@ -52,7 +59,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   viewButton: {
-    backgroundColor: 'gray',
+    justifyContent: 'center',
     height: 40,
     width: 40,
     marginRight: 15,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -6,23 +6,40 @@ import {
   FlatList,
   Image,
   RefreshControl,
+  ActivityIndicator,
+  StyleSheet,
 } from 'react-native';
 import Colors from '../../constants/Colors';
+import {urlHost} from '../../constants/ApiConstants';
+import {useNavigation} from '@react-navigation/native';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {getListSuccess, isFetching} from './reducer';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootState} from '../../store';
 
-const ListEmployee: React.FC = ({ navigation }) => {
+const ListEmployee: React.FC = ({}) => {
+  const navigation = useNavigation();
+
   const [data, setData] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
+  const [searchInput, setSearchInput] = useState('');
+
+  const dispatch = useDispatch();
+  const {isLoading} = useSelector((state: RootState) => state.employee);
+
+  console.log('4444', isLoading);
 
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchData = () => {
-    fetch('http://192.168.1.10:5001/api/contacts')
+    dispatch(isFetching());
+    fetch(`${urlHost}/api/contacts`)
       .then(response => response.json())
       .then(responseData => {
         console.log('response', responseData);
-
+        dispatch(getListSuccess());
         setData(responseData);
       })
       .catch(error => {
@@ -42,7 +59,7 @@ const ListEmployee: React.FC = ({ navigation }) => {
     refreshData();
   };
 
-  const renderItem = ({ item }) => {
+  const renderItem = ({item}) => {
     return (
       <TouchableOpacity
         style={{
@@ -55,7 +72,7 @@ const ListEmployee: React.FC = ({ navigation }) => {
           borderBottomColor: Colors.PRIMARY04,
         }}
         onPress={() => {
-          navigation.navigate('InfoEmployee', { data: item });
+          navigation.navigate('InfoEmployee', {data: item});
         }}
       >
         <View
@@ -84,8 +101,8 @@ const ListEmployee: React.FC = ({ navigation }) => {
             justifyContent: 'center',
           }}
         >
-          <Text style={{ color: Colors.black }}>{item.name}</Text>
-          <Text style={{ color: Colors.PRIMARY04 }}>{item.phone}</Text>
+          <Text style={{color: Colors.black}}>{item.name}</Text>
+          <Text style={{color: Colors.PRIMARY04}}>{item.phone}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -98,7 +115,27 @@ const ListEmployee: React.FC = ({ navigation }) => {
         paddingHorizontal: 20,
       }}
     >
-      <View style={{}}>
+      {/* <View style={{paddingTop: 10}}>
+        <MyTextInput
+          placeholder={'Tìm kiếm nhân viên'}
+          value={searchInput}
+          onChangeText={value => {
+            setSearchInput(value);
+          }}
+        />
+      </View> */}
+
+      {isLoading ? (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <ActivityIndicator size="large" color={Colors.PRIMARY} />
+        </View>
+      ) : (
         <FlatList
           refreshControl={
             <RefreshControl
@@ -107,30 +144,35 @@ const ListEmployee: React.FC = ({ navigation }) => {
               onRefresh={handleRefresh}
             />
           }
-          style={{ paddingVertical: 10 }}
           data={data}
           renderItem={renderItem}
         />
-      </View>
+      )}
 
       <TouchableOpacity
         onPress={() => {
           navigation.navigate('AddEmployee');
         }}
-        style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: 60,
-          position: 'absolute',
-          bottom: 50,
-          right: 30,
-          height: 60,
-          backgroundColor: Colors.PRIMARY,
-          borderRadius: 100,
-        }}
-      />
+        style={styles.buttonAdd}
+      >
+        <FontAwesome5 name={'plus'} size={20} color={Colors.white} />
+      </TouchableOpacity>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  buttonAdd: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 60,
+    position: 'absolute',
+    bottom: 50,
+    right: 30,
+    height: 60,
+    backgroundColor: Colors.PRIMARY,
+    borderRadius: 100,
+  },
+});
 
 export default ListEmployee;

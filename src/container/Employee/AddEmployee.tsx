@@ -1,27 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import { View, Dimensions, StyleSheet } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, Dimensions, StyleSheet} from 'react-native';
 import Colors from '../../constants/Colors';
 import MyTextInput from '../../components/MyTextInput';
 import MyButton from '../../components/MyButton';
-import { fetchAPI } from '../../constants/ApiConstants';
+import {fetchAPI, urlHost} from '../../constants/ApiConstants';
+import {useNavigation} from '@react-navigation/native';
 
 let width = Dimensions.get('window').width;
 
-const AddEmployee: React.FC = ({ navigation, route }) => {
+const AddEmployee: React.FC = ({}) => {
+  const navigation = useNavigation();
+
   const [username, setUsername] = useState('');
   const [phone, setPhone] = useState('');
-  const [address, setAddress] = useState('');
+  const [point, setPoint] = useState();
 
-  const AddEmployee = async (username, phone) => {
+  const _AddEmployee = async (userName, Phone, Point) => {
     const body = {
-      name: username,
-      phone: phone,
+      name: userName,
+      phone: Phone,
+      point: Point,
     };
     await fetchAPI({
-      url: 'http://192.168.1.10:5001/api/contacts',
+      url: `${urlHost}/api/contacts`,
       data: body,
       method: 'POST',
     });
+    navigation.goBack();
   };
 
   return (
@@ -47,12 +52,26 @@ const AddEmployee: React.FC = ({ navigation, route }) => {
             setPhone(value);
           }}
         />
+        <MyTextInput
+          placeholder={'Nhập số điểm'}
+          value={point}
+          keyboardType="number-pad"
+          onChangeText={value => {
+            setPoint(value);
+          }}
+        />
       </View>
-      <View style={{ flex: 2, justifyContent: 'center', alignItems: 'center' }}>
+      <View
+        style={{
+          flex: 2,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
         <MyButton
           style={styles.button}
           text="Lưu"
-          onPress={() => AddEmployee(username, phone)}
+          onPress={() => _AddEmployee(username, phone, point)}
         />
       </View>
     </View>

@@ -1,6 +1,6 @@
 import React from 'react';
 import Colors from '../constants/Colors';
-import { Text, View, TouchableOpacity } from 'react-native';
+import {Text, View, TouchableOpacity} from 'react-native';
 
 type MyButtonProps = {
   text: string;
@@ -8,6 +8,7 @@ type MyButtonProps = {
   keyboardType: string;
   value: string;
   enable: boolean;
+  textColor: string;
 };
 
 const MyButton: React.FC = ({
@@ -15,6 +16,7 @@ const MyButton: React.FC = ({
   onPress,
   style,
   enable = true,
+  textColor = Colors.white,
 }: MyButtonProps) => {
   return (
     <TouchableOpacity onPress={onPress}>
@@ -28,7 +30,7 @@ const MyButton: React.FC = ({
       >
         <Text
           style={{
-            color: Colors.white,
+            color: textColor,
             fontSize: 20,
             fontWeight: '500',
           }}

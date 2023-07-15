@@ -8,8 +8,7 @@ import AppNavigator from './AppNavigation';
 const AppNavigation: React.FC = () => {
   const isLogin = useSelector((state: RootState) => state.auth.isLogin);
 
-  console.log('loginnn', isLogin);
-
+  // console.log('loginnn', isLogin);
 
   return (
     <NavigationContainer>
