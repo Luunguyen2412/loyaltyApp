@@ -1,18 +1,48 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, Dimensions, Image, StyleSheet} from 'react-native';
 import MyTextInput from '../../components/MyTextInput';
 import Colors from '../../constants/Colors';
 import MyButton from '../../components/MyButton';
 import {useDispatch} from 'react-redux';
 import {logOut} from '../Login/reducer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {fetchAPI, urlHost} from '../../constants/ApiConstants';
 
 let width = Dimensions.get('window').width;
 
 const ProfileScreen: React.FC = () => {
   const dispatch = useDispatch();
 
-  const onLogOut = () => {
+  const onLogOut = async () => {
+    await AsyncStorage.clear();
     dispatch(logOut());
+  };
+
+  useEffect(() => {
+    getInfomation();
+  }, []);
+
+  const getInfomation = async () => {
+    const token = await AsyncStorage.getItem('access_token');
+
+    // await fetch({
+    //   url: `${urlHost}/api/users/current`,
+    //   method: 'GET',
+    // });
+    fetch(`${urlHost}/api/users/current`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(responseData => {
+        console.log('responseUserInfomation', responseData);
+      })
+      .catch(error => {
+        console.log('errorUserInfomation', error);
+      });
   };
 
   return (

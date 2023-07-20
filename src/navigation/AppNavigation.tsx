@@ -7,6 +7,10 @@ import AddEmployee from '../container/Employee/AddEmployee';
 import Colors from '../constants/Colors';
 import InfoEmployee from '../container/Employee/InfoEmployee';
 import OrderScreen from '../container/Order';
+import ListCustomer from '../container/Customer/ListCustomer';
+import InfoCustomer from '../container/Customer/InfoCustomer';
+import PaymentScreen from '../container/Order/Payment';
+import AddCustomer from '../container/Customer/AddCustomer';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +25,39 @@ const AppNavigator: React.FC = () => {
         // }}
         options={{
           title: 'Home Management',
+          headerTintColor: Colors.white,
+          headerStyle: {
+            backgroundColor: Colors.PRIMARY,
+          },
+        }}
+      />
+      <Stack.Screen
+        name="ListCustomer"
+        component={ListCustomer}
+        options={{
+          title: 'List Customer',
+          headerTintColor: Colors.white,
+          headerStyle: {
+            backgroundColor: Colors.PRIMARY,
+          },
+        }}
+      />
+      <Stack.Screen
+        name="AddCustomer"
+        component={AddCustomer}
+        options={{
+          title: 'Add Customer',
+          headerTintColor: Colors.white,
+          headerStyle: {
+            backgroundColor: Colors.PRIMARY,
+          },
+        }}
+      />
+      <Stack.Screen
+        name="InfoCustomer"
+        component={InfoCustomer}
+        options={{
+          title: 'Customer Infomation',
           headerTintColor: Colors.white,
           headerStyle: {
             backgroundColor: Colors.PRIMARY,
@@ -76,6 +113,17 @@ const AppNavigator: React.FC = () => {
         component={OrderScreen}
         options={{
           title: 'Order products',
+          headerTintColor: Colors.white,
+          headerStyle: {
+            backgroundColor: Colors.PRIMARY,
+          },
+        }}
+      />
+      <Stack.Screen
+        name="Payment"
+        component={PaymentScreen}
+        options={{
+          title: 'Payment',
           headerTintColor: Colors.white,
           headerStyle: {
             backgroundColor: Colors.PRIMARY,

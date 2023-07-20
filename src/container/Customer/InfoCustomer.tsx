@@ -8,45 +8,52 @@ import {fetchAPI, urlHost} from '../../constants/ApiConstants';
 
 let width = Dimensions.get('window').width;
 
-const InfoEmployee: React.FC = ({}) => {
+const InfoCustomer: React.FC = ({}) => {
   const navigation = useNavigation();
   const route = useRoute();
 
   const [username, setUsername] = useState('');
   const [phone, setPhone] = useState('');
-
-  const [position, setPosition] = useState(''); // 1 - Admin, 2 - Staff, 3 - Customer
-
-  const [address, setAddress] = useState('');
-  const [gender, setGender] = useState('');
+  const [point, setPoint] = useState();
+  const [membership, setMembership] = useState();
 
   const [userId, setUserId] = useState('');
 
   const {data} = route.params;
 
   useEffect(() => {
-    setUsername(data.username);
+    setUsername(data.name);
     setPhone(data.phone);
-    setPosition(data.position);
-    setAddress(data.address);
+    setPoint(data.point);
+    setMembership(data.membership);
     setUserId(data._id);
-
-    if (data.gender === 1) {
-      setGender('Nam');
-    } else if (data.gender === 2) {
-      setGender('Nữ');
-    } else {
-      setGender('');
-    }
-
-    if (data.position === 1) {
-      setPosition('Admin');
-    } else if (data.position === 2) {
-      setPosition('Staff');
-    } else if (data.position === 3) {
-      setPosition('Customer');
-    }
   }, [data]);
+
+  const RemoveEmployee = idUser => {
+    fetch(`${urlHost}/api/contacts/${idUser}`, {
+      method: 'DELETE',
+    })
+      .then(response => response.json())
+      .then(responseData => {
+        console.log('responseRemoveContact', responseData);
+        navigation.goBack();
+      })
+      .catch(error => {
+        console.error('errorrr: ', error);
+      });
+  };
+
+  const getMembershipLevel = () => {
+    if (point >= 2000) {
+      return 'Vàng';
+    } else if (point >= 1000) {
+      return 'Bạc';
+    } else if (point >= 500) {
+      return 'Đồng';
+    } else {
+      return 'Thường';
+    }
+  };
 
   return (
     <View
@@ -69,18 +76,14 @@ const InfoEmployee: React.FC = ({}) => {
           editable={false}
         />
         <MyTextInput
-          placeholder="Vị trí của bạn"
-          value={position}
+          placeholder={'Số điểm'}
+          value={point > 0 ? `${point.toString()} điểm` : '0 điểm'}
           editable={false}
         />
         <MyTextInput
-          placeholder="Chọn giới tính của bạn"
-          value={gender}
-          editable={false}
-        />
-        <MyTextInput
-          placeholder="Địa chỉ của bạn"
-          value={address}
+          placeholder={'Xếp hạng'}
+          // value={membership > 0 ? membership.toString() : 'Thường'}
+          value={getMembershipLevel()}
           editable={false}
         />
       </View>
@@ -102,7 +105,9 @@ const InfoEmployee: React.FC = ({}) => {
               [
                 {
                   text: 'Đồng ý',
-                  onPress: () => {},
+                  onPress: () => {
+                    RemoveEmployee(userId);
+                  },
                 },
                 {
                   text: 'Không',
@@ -150,4 +155,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default InfoEmployee;
+export default InfoCustomer;

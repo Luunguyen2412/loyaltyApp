@@ -5,11 +5,54 @@ import Colors from '../../constants/Colors';
 import MyButton from '../../components/MyButton';
 import MyTextInput from '../../components/MyTextInput';
 
+import {fetchAPI, urlHost} from '../../constants/ApiConstants';
+import {useDispatch} from 'react-redux';
+import {goToMain} from '../Login/reducer';
+
 let width = Dimensions.get('window').width;
 
+// SignUp just for Customer
 const SignupScreen: React.FC = () => {
-  const {username, setUsername} = useState('');
-  const {password, setPassword} = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [isValidate, setIsValidate] = useState(false);
+  const [msgError, setMsgError] = useState('');
+  const [position, setPosition] = useState(3); // 1 - Admin, 2 - Staff, 3 - Customer
+
+  const [phone, setPhone] = useState('');
+  const [address, setAddress] = useState('');
+  const [gender, setGender] = useState();
+
+  const dispatch = useDispatch();
+
+  const onSignIn = async (userName, phoneNumber, pass, posiTion, addRess) => {
+    if (phoneNumber === '' || pass === '' || userName === '') {
+      setIsValidate(true);
+    }
+
+    const body = {
+      username: userName,
+      phone: phoneNumber,
+      password: pass,
+      position: posiTion,
+      address: addRess,
+    };
+
+    console.log('bodyyyy', body);
+
+    await fetchAPI({
+      url: `${urlHost}/api/users/register`,
+      data: body,
+      method: 'POST',
+    })
+      .then(async responseData => {
+        console.log('responseRegister', responseData);
+        dispatch(goToMain());
+      })
+      .catch(error => {
+        console.log('errorRegister', error);
+      });
+  };
 
   return (
     <KeyboardAwareScrollView
@@ -36,15 +79,63 @@ const SignupScreen: React.FC = () => {
             backgroundColor: Colors.white,
           }}
         >
-          <MyTextInput placeholder="Nhập tên của bạn" />
-          <MyTextInput placeholder="Nhập họ của bạn" />
-          <MyTextInput placeholder="Nhập số điện thoại của bạn" />
-          <MyTextInput placeholder="Chọn ngày sinh của bạn" />
-          <MyTextInput placeholder="Chọn giới tính của bạn" />
+          {/* <MyTextInput placeholder="Nhập Avatar của bạn" /> */}
 
-          <View style={{height: 50}} />
+          <MyTextInput
+            placeholder="Nhập họ tên của bạn"
+            value={username}
+            onChangeText={value => {
+              setUsername(value);
+              setIsValidate(false);
+            }}
+          />
+          <MyTextInput
+            placeholder="Nhập số điện thoại của bạn"
+            value={phone}
+            onChangeText={value => {
+              setPhone(value);
+              setIsValidate(false);
+            }}
+          />
 
-          <MyButton style={styles.SignInButton} text="Tạo tài khoản" />
+          <MyTextInput
+            placeholder="Nhập mật khẩu của bạn"
+            value={password}
+            onChangeText={value => {
+              setPassword(value);
+              setIsValidate(false);
+            }}
+          />
+
+          <MyTextInput placeholder="Chọn giới tính của bạn" value={gender} />
+          <MyTextInput
+            placeholder="Nhập địa chỉ của bạn"
+            value={address}
+            onChangeText={value => {
+              setAddress(value);
+              setIsValidate(false);
+            }}
+          />
+
+          {isValidate ? (
+            <View
+              style={{
+                height: 50,
+                alignItems: 'center',
+              }}
+            >
+              <Text style={{color: 'red'}}>Vui lòng điền thông tin đầy đủ</Text>
+            </View>
+          ) : (
+            <View style={{height: 50}} />
+          )}
+          <MyButton
+            onPress={() => {
+              onSignIn(username, phone, password, position, address);
+            }}
+            style={styles.SignInButton}
+            text="Tạo tài khoản"
+          />
         </View>
       </View>
     </KeyboardAwareScrollView>

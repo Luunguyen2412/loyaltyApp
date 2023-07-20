@@ -13,11 +13,11 @@ import Colors from '../../constants/Colors';
 import {fetchAPI, urlHost} from '../../constants/ApiConstants';
 import {useNavigation} from '@react-navigation/native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {getListSuccess, isFetching} from './reducer';
+// import {getListSuccess, isFetching} from './reducer';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../store';
 
-const ListEmployee: React.FC = ({}) => {
+const ListCustomer: React.FC = ({}) => {
   const navigation = useNavigation();
 
   const [data, setData] = useState(null);
@@ -32,28 +32,16 @@ const ListEmployee: React.FC = ({}) => {
   }, []);
 
   const fetchData = async () => {
-    dispatch(isFetching());
-    // await fetch(`${urlHost}/api/contacts`)
-    //   .then(response => response.json())
-    //   .then(responseData => {
-    //     console.log('response', responseData);
-    //     dispatch(getListSuccess());
-    //     setData(responseData);
-    //   })
-    //   .catch(error => {
-    //     console.error(error);
-    //   });
-    await fetchAPI({
-      url: `${urlHost}/api/users`,
-      method: 'GET',
-    })
-      .then(async responseData => {
-        console.log('responseUserInfomation', responseData);
-        dispatch(getListSuccess());
+    // dispatch(isFetching());
+    await fetch(`${urlHost}/api/contacts`)
+      .then(response => response.json())
+      .then(responseData => {
+        console.log('response', responseData);
+        // dispatch(getListSuccess());
         setData(responseData);
       })
       .catch(error => {
-        console.log('errorUserInfomation', error);
+        console.error(error);
       });
   };
 
@@ -82,7 +70,7 @@ const ListEmployee: React.FC = ({}) => {
           borderBottomColor: Colors.PRIMARY04,
         }}
         onPress={() => {
-          navigation.navigate('InfoEmployee', {data: item});
+          navigation.navigate('InfoCustomer', {data: item});
         }}
       >
         <View
@@ -111,7 +99,7 @@ const ListEmployee: React.FC = ({}) => {
             justifyContent: 'center',
           }}
         >
-          <Text style={{color: Colors.black}}>{item.username}</Text>
+          <Text style={{color: Colors.black}}>{item.name}</Text>
           <Text style={{color: Colors.PRIMARY04}}>{item.phone}</Text>
         </View>
       </TouchableOpacity>
@@ -161,7 +149,7 @@ const ListEmployee: React.FC = ({}) => {
 
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate('AddEmployee');
+          navigation.navigate('AddCustomer');
         }}
         style={styles.buttonAdd}
       >
@@ -185,4 +173,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ListEmployee;
+export default ListCustomer;

@@ -1,6 +1,6 @@
 import React from 'react';
 import Colors from '../constants/Colors';
-import { StyleSheet, TextInput, Dimensions, TextInputProps } from 'react-native';
+import {StyleSheet, TextInput, Dimensions, TextInputProps} from 'react-native';
 
 let width = Dimensions.get('window').width;
 

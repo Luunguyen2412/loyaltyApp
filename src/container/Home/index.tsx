@@ -22,8 +22,8 @@ const listModule = [
   },
   {
     id: 3,
-    name: 'Client\nmanagement',
-    navigate: '',
+    name: 'Customer\nmanagement',
+    navigate: 'ListCustomer',
     icon: 'users',
   },
   {
