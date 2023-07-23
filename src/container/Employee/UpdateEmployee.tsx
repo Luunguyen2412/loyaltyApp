@@ -9,7 +9,7 @@ import MyDropdown from '../../components/MyDropdown';
 
 let width = Dimensions.get('window').width;
 
-const AddEmployee: React.FC = ({}) => {
+const UpdateEmployee: React.FC = ({}) => {
   const navigation = useNavigation();
 
   const [username, setUsername] = useState('');
@@ -26,7 +26,36 @@ const AddEmployee: React.FC = ({}) => {
 
   const [isOpenDropDownGender, setIsOpenDropDownGender] = useState(false);
 
-  const _AddEmployee = async (
+  const [userId, setUserId] = useState('');
+
+  const {data} = route.params;
+
+  useEffect(() => {
+    // setAvatar(data.avatar);
+    setUsername(data.username);
+    setPhone(data.phone);
+    setPosition(data.position);
+    setAddress(data.address);
+    setUserId(data._id);
+
+    if (data.gender === 1) {
+      setGender('Nam');
+    } else if (data.gender === 2) {
+      setGender('Nữ');
+    } else {
+      setGender('');
+    }
+
+    if (data.position === 1) {
+      setPosition('Admin');
+    } else if (data.position === 2) {
+      setPosition('Staff');
+    } else if (data.position === 3) {
+      setPosition('Customer');
+    }
+  }, [data]);
+
+  const _updateEmployee = async (
     userName,
     phoneNumber,
     pass,
@@ -48,16 +77,16 @@ const AddEmployee: React.FC = ({}) => {
     };
 
     await fetchAPI({
-      url: `${urlHost}/api/users/register`,
+      url: `${urlHost}/api/users/${userId}`,
       data: body,
-      method: 'POST',
+      method: 'PUT',
     })
       .then(async responseData => {
-        console.log('responseAddEmployee', responseData);
+        console.log('responseUpdateEmployee', responseData);
         navigation.goBack();
       })
       .catch(error => {
-        console.log('errorAddEmployee', error);
+        console.log('errorUpdateEmployee', error);
       });
   };
 
@@ -164,7 +193,7 @@ const AddEmployee: React.FC = ({}) => {
           style={styles.button}
           text="Lưu"
           onPress={() =>
-            _AddEmployee(username, phone, password, position, address)
+            _updateEmployee(username, phone, password, position, address)
           }
         />
       </View>
@@ -191,4 +220,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddEmployee;
+export default UpdateEmployee;

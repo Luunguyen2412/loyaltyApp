@@ -10,7 +10,7 @@ import Colors from '../../constants/Colors';
 import MyButton from '../../components/MyButton';
 import MyTextInput from '../../components/MyTextInput';
 import {useSelector, useDispatch} from 'react-redux';
-import {goToMain, isFetching, isLogInFail} from './reducer';
+import {goToMain, isFetching, isLogInFail, saveDataUser} from './reducer';
 import {useNavigation} from '@react-navigation/native';
 import {fetchAPI, urlHost} from '../../constants/ApiConstants';
 import {RootState} from '../../store';
@@ -74,6 +74,7 @@ const LoginScreen: React.FC = ({}) => {
           );
 
           dispatch(goToMain());
+          dispatch(saveDataUser(responseData.data));
         }
       })
       .catch(error => {

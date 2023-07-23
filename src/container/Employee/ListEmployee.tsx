@@ -21,6 +21,7 @@ const ListEmployee: React.FC = ({}) => {
   const navigation = useNavigation();
 
   const [data, setData] = useState(null);
+  // const [listEmployee, setListEmployee] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [searchInput, setSearchInput] = useState('');
 
@@ -29,20 +30,15 @@ const ListEmployee: React.FC = ({}) => {
 
   useEffect(() => {
     fetchData();
+    // if (data) {
+    //   const dataEmployee = data.find(e => e.position === 1);
+    //   setListEmployee(dataEmployee);
+    // }
   }, []);
 
   const fetchData = async () => {
     dispatch(isFetching());
-    // await fetch(`${urlHost}/api/contacts`)
-    //   .then(response => response.json())
-    //   .then(responseData => {
-    //     console.log('response', responseData);
-    //     dispatch(getListSuccess());
-    //     setData(responseData);
-    //   })
-    //   .catch(error => {
-    //     console.error(error);
-    //   });
+
     await fetchAPI({
       url: `${urlHost}/api/users`,
       method: 'GET',
@@ -74,9 +70,9 @@ const ListEmployee: React.FC = ({}) => {
       <TouchableOpacity
         style={{
           flexDirection: 'row',
-          height: 56,
+          padding: 5,
           backgroundColor: Colors.white,
-          marginVertical: 10,
+          marginVertical: 5,
           borderRadius: 10,
           borderWidth: 1,
           borderBottomColor: Colors.PRIMARY04,
@@ -87,32 +83,48 @@ const ListEmployee: React.FC = ({}) => {
       >
         <View
           style={{
-            flex: 2,
+            flex: 3,
             justifyContent: 'center',
             alignItems: 'center',
           }}
         >
           <Image
             style={{
-              height: 40,
-              width: 40,
-              borderRadius: 40,
-              backgroundColor: 'gray',
+              height: 100,
+              width: 100,
+              borderRadius: 10,
+              resizeMode: 'contain',
+              backgroundColor: Colors.grey,
             }}
-            // source={{ uri: 'ic_employee' }}
+            source={{uri: item.avatar}}
             resizeMode="contain"
           />
         </View>
 
         <View
           style={{
-            flex: 8,
+            flex: 7,
             flexDirection: 'column',
-            justifyContent: 'center',
+            justifyContent: 'flex-start',
+            paddingLeft: 10,
+            paddingTop: 10,
           }}
         >
           <Text style={{color: Colors.black}}>{item.username}</Text>
-          <Text style={{color: Colors.PRIMARY04}}>{item.phone}</Text>
+          <Text
+            style={{
+              color: Colors.PRIMARY04,
+            }}
+          >
+            {item.phone}
+          </Text>
+          <Text
+            style={{
+              color: Colors.PRIMARY04,
+            }}
+          >
+            {item.position === 1 ? 'Admin' : 'Staff'}
+          </Text>
         </View>
       </TouchableOpacity>
     );

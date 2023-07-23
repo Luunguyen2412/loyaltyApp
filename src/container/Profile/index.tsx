@@ -1,17 +1,24 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Dimensions, Image, StyleSheet} from 'react-native';
 import MyTextInput from '../../components/MyTextInput';
 import Colors from '../../constants/Colors';
 import MyButton from '../../components/MyButton';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {logOut} from '../Login/reducer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {fetchAPI, urlHost} from '../../constants/ApiConstants';
+import {RootState} from '../../store';
 
 let width = Dimensions.get('window').width;
 
 const ProfileScreen: React.FC = () => {
   const dispatch = useDispatch();
+
+  const [position, setPosition] = useState(''); // 1 - Admin, 2 - Staff
+
+  const [gender, setGender] = useState(''); // 1 - Male, 2 - Female;
+
+  const {dataUser} = useSelector((state: RootState) => state.auth);
 
   const onLogOut = async () => {
     await AsyncStorage.clear();
@@ -19,31 +26,18 @@ const ProfileScreen: React.FC = () => {
   };
 
   useEffect(() => {
-    getInfomation();
+    if (dataUser.gender === 1) {
+      setGender('Nam');
+    } else {
+      setGender('Nữ');
+    }
+
+    if (dataUser.position === 1) {
+      setPosition('Admin');
+    } else {
+      setPosition('Staff');
+    }
   }, []);
-
-  const getInfomation = async () => {
-    const token = await AsyncStorage.getItem('access_token');
-
-    // await fetch({
-    //   url: `${urlHost}/api/users/current`,
-    //   method: 'GET',
-    // });
-    fetch(`${urlHost}/api/users/current`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(responseData => {
-        console.log('responseUserInfomation', responseData);
-      })
-      .catch(error => {
-        console.log('errorUserInfomation', error);
-      });
-  };
 
   return (
     <View
@@ -64,15 +58,16 @@ const ProfileScreen: React.FC = () => {
             borderRadius: 50,
             borderWidth: 1,
           }}
+          source={{uri: dataUser.avatar}}
         />
       </View>
 
       <View>
-        <MyTextInput value="Nguyen Viet Luu" editable={false} />
-        <MyTextInput value="Employee" editable={false} />
-        <MyTextInput value="Male" editable={false} />
-        <MyTextInput value="0852585888" editable={false} />
-        <MyTextInput value="nguyenvietluu2412@gmail.com" editable={false} />
+        <MyTextInput value={dataUser.username} editable={false} />
+        <MyTextInput value={dataUser.phone} editable={false} />
+        <MyTextInput value={position} editable={false} />
+        <MyTextInput value={gender} editable={false} />
+        <MyTextInput value={dataUser.address} editable={false} />
       </View>
 
       <View style={{marginTop: 50}}>

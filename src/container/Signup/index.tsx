@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, Dimensions} from 'react-native';
+import {View, StyleSheet, Dimensions, Text} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Colors from '../../constants/Colors';
 import MyButton from '../../components/MyButton';
@@ -8,6 +8,7 @@ import MyTextInput from '../../components/MyTextInput';
 import {fetchAPI, urlHost} from '../../constants/ApiConstants';
 import {useDispatch} from 'react-redux';
 import {goToMain} from '../Login/reducer';
+import MyDropdown from '../../components/MyDropdown';
 
 let width = Dimensions.get('window').width;
 
@@ -19,15 +20,20 @@ const SignupScreen: React.FC = () => {
   const [msgError, setMsgError] = useState('');
   const [position, setPosition] = useState(3); // 1 - Admin, 2 - Staff, 3 - Customer
 
+  const [namePosition, setNamePosition] = useState('Khách hàng');
+
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
-  const [gender, setGender] = useState();
+  const [gender, setGender] = useState(); // 1 - Male, 2 - Female;
+
+  const [isOpenDropDown, setIsOpenDropDown] = useState(false);
 
   const dispatch = useDispatch();
 
   const onSignIn = async (userName, phoneNumber, pass, posiTion, addRess) => {
     if (phoneNumber === '' || pass === '' || userName === '') {
       setIsValidate(true);
+      return;
     }
 
     const body = {
@@ -82,6 +88,12 @@ const SignupScreen: React.FC = () => {
           {/* <MyTextInput placeholder="Nhập Avatar của bạn" /> */}
 
           <MyTextInput
+            placeholder="Chọn vị trí của bạn"
+            value={`Bạn là ${namePosition}`}
+            editable={false}
+          />
+
+          <MyTextInput
             placeholder="Nhập họ tên của bạn"
             value={username}
             onChangeText={value => {
@@ -107,7 +119,23 @@ const SignupScreen: React.FC = () => {
             }}
           />
 
-          <MyTextInput placeholder="Chọn giới tính của bạn" value={gender} />
+          <MyDropdown
+            isOpen={isOpenDropDown}
+            onPress={() => {
+              setIsOpenDropDown(!isOpenDropDown);
+            }}
+            placeholder="Chọn giới tính của bạn"
+            itemDrops={[
+              {label: 'Nam', value: 1},
+              {label: 'Nữ', value: 2},
+            ]}
+            showTickIcon
+            onSelectItemValues={values => {
+              setIsOpenDropDown(!isOpenDropDown);
+              setGender(values);
+            }}
+            value={gender}
+          />
           <MyTextInput
             placeholder="Nhập địa chỉ của bạn"
             value={address}

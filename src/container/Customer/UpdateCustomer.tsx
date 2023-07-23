@@ -8,7 +8,7 @@ import {fetchAPI, urlHost} from '../../constants/ApiConstants';
 
 let width = Dimensions.get('window').width;
 
-const InfoCustomer: React.FC = ({}) => {
+const UpdateCustomer: React.FC = ({}) => {
   const navigation = useNavigation();
   const route = useRoute();
 
@@ -29,18 +29,26 @@ const InfoCustomer: React.FC = ({}) => {
     setUserId(data._id);
   }, [data]);
 
-  const RemoveEmployee = idUser => {
-    fetch(`${urlHost}/api/contacts/${idUser}`, {
-      method: 'DELETE',
+  const _updateCustomer = async (userName, Phone, Point, Membership) => {
+    const body = {
+      name: userName,
+      phone: Phone,
+      point: Point,
+      membership: Membership,
+    };
+    await fetchAPI({
+      url: `${urlHost}/api/contacts/${userId}`,
+      data: body,
+      method: 'PUT',
     })
-      .then(response => response.json())
-      .then(responseData => {
-        console.log('responseRemoveContact', responseData);
+      .then(async responseData => {
+        console.log('responseUpdateCustomer', responseData);
         navigation.goBack();
       })
       .catch(error => {
-        console.error('errorrr: ', error);
+        console.log('errorUpdateCustomer', error);
       });
+    navigation.goBack();
   };
 
   const getMembershipLevel = () => {
@@ -69,61 +77,25 @@ const InfoCustomer: React.FC = ({}) => {
           paddingTop: 20,
         }}
       >
-        <MyTextInput placeholder={'Họ tên'} value={username} editable={false} />
-        <MyTextInput
-          placeholder={'Số điện thoại'}
-          value={phone}
-          editable={false}
-        />
+        <MyTextInput placeholder={'Họ tên'} value={username} />
+        <MyTextInput placeholder={'Số điện thoại'} value={phone} />
         <MyTextInput
           placeholder={'Số điểm'}
           value={point > 0 ? `${point.toString()} điểm` : '0 điểm'}
-          editable={false}
         />
-        <MyTextInput
-          placeholder={'Xếp hạng'}
-          // value={membership > 0 ? membership.toString() : 'Thường'}
-          value={getMembershipLevel()}
-          editable={false}
-        />
+        <MyTextInput placeholder={'Xếp hạng'} value={getMembershipLevel()} />
       </View>
       <View
         style={{
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexDirection: 'row',
           flex: 2,
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
         <MyButton
-          style={styles.buttonRemove}
-          text="Xoá"
-          onPress={() => {
-            Alert.alert(
-              'Thông báo',
-              'Bạn có chắc chắn muốn xoá nhân viên này không?',
-              [
-                {
-                  text: 'Đồng ý',
-                  onPress: () => {
-                    RemoveEmployee(userId);
-                  },
-                },
-                {
-                  text: 'Không',
-                  onPress: () => {},
-                },
-              ],
-              {cancelable: false},
-            );
-          }}
-        />
-        <MyButton
-          style={styles.buttonEdit}
-          text="Chỉnh sửa"
-          onPress={() => {
-            navigation.navigate('UpdateCustomer', {data: data});
-          }}
+          style={styles.button}
+          text="Lưu"
+          onPress={() => _updateCustomer(username, phone, point, membership)}
         />
       </View>
     </View>
@@ -131,20 +103,7 @@ const InfoCustomer: React.FC = ({}) => {
 };
 
 const styles = StyleSheet.create({
-  buttonEdit: {
-    marginBottom: 10,
-    alignItems: 'center',
-    backgroundColor: Colors.PRIMARY04,
-    borderRadius: 10,
-    color: Colors.white,
-    fontSize: 16,
-    fontWeight: 'bold',
-    height: 54,
-    justifyContent: 'center',
-    width: 156,
-  },
-  buttonRemove: {
-    marginBottom: 10,
+  button: {
     alignItems: 'center',
     backgroundColor: Colors.PRIMARY,
     borderRadius: 10,
@@ -153,8 +112,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     height: 54,
     justifyContent: 'center',
-    width: 156,
+    width: width * 0.9,
   },
 });
 
-export default InfoCustomer;
+export default UpdateCustomer;

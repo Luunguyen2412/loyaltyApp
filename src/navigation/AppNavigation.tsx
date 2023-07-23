@@ -11,6 +11,8 @@ import ListCustomer from '../container/Customer/ListCustomer';
 import InfoCustomer from '../container/Customer/InfoCustomer';
 import PaymentScreen from '../container/Order/Payment';
 import AddCustomer from '../container/Customer/AddCustomer';
+import UpdateCustomer from '../container/Customer/UpdateCustomer';
+import UpdateEmployee from '../container/Employee/UpdateEmployee';
 
 const Stack = createNativeStackNavigator();
 
@@ -47,6 +49,17 @@ const AppNavigator: React.FC = () => {
         component={AddCustomer}
         options={{
           title: 'Add Customer',
+          headerTintColor: Colors.white,
+          headerStyle: {
+            backgroundColor: Colors.PRIMARY,
+          },
+        }}
+      />
+      <Stack.Screen
+        name="UpdateCustomer"
+        component={UpdateCustomer}
+        options={{
+          title: 'Update Customer Infomation',
           headerTintColor: Colors.white,
           headerStyle: {
             backgroundColor: Colors.PRIMARY,
@@ -102,6 +115,17 @@ const AppNavigator: React.FC = () => {
         component={InfoEmployee}
         options={{
           title: 'Employee Infomation',
+          headerTintColor: Colors.white,
+          headerStyle: {
+            backgroundColor: Colors.PRIMARY,
+          },
+        }}
+      />
+      <Stack.Screen
+        name="UpdateEmployee"
+        component={UpdateEmployee}
+        options={{
+          title: 'Update Employee Infomation',
           headerTintColor: Colors.white,
           headerStyle: {
             backgroundColor: Colors.PRIMARY,

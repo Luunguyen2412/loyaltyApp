@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, Dimensions, StyleSheet, Alert} from 'react-native';
+import {View, Dimensions, StyleSheet, Alert, Image} from 'react-native';
 import Colors from '../../constants/Colors';
 import MyTextInput from '../../components/MyTextInput';
 import MyButton from '../../components/MyButton';
@@ -12,6 +12,7 @@ const InfoEmployee: React.FC = ({}) => {
   const navigation = useNavigation();
   const route = useRoute();
 
+  const [avatar, setAvatar] = useState('');
   const [username, setUsername] = useState('');
   const [phone, setPhone] = useState('');
 
@@ -25,6 +26,7 @@ const InfoEmployee: React.FC = ({}) => {
   const {data} = route.params;
 
   useEffect(() => {
+    setAvatar(data.avatar);
     setUsername(data.username);
     setPhone(data.phone);
     setPosition(data.position);
@@ -62,6 +64,18 @@ const InfoEmployee: React.FC = ({}) => {
           paddingTop: 20,
         }}
       >
+        <View style={{paddingVertical: 30}}>
+          <Image
+            style={{
+              backgroundColor: 'gray',
+              height: 100,
+              width: 100,
+              borderRadius: 50,
+              borderWidth: 1,
+            }}
+            source={{uri: avatar}}
+          />
+        </View>
         <MyTextInput placeholder={'Họ tên'} value={username} editable={false} />
         <MyTextInput
           placeholder={'Số điện thoại'}
@@ -116,7 +130,9 @@ const InfoEmployee: React.FC = ({}) => {
         <MyButton
           style={styles.buttonEdit}
           text="Chỉnh sửa"
-          onPress={() => {}}
+          onPress={() => {
+            navigation.navigate('UpdateEmployee', {data: data});
+          }}
         />
       </View>
     </View>
