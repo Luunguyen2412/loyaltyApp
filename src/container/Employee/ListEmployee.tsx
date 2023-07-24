@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import Colors from '../../constants/Colors';
 import {fetchAPI, urlHost} from '../../constants/ApiConstants';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {getListSuccess, isFetching} from './reducer';
 import {useDispatch, useSelector} from 'react-redux';
@@ -24,16 +24,13 @@ const ListEmployee: React.FC = ({}) => {
   // const [listEmployee, setListEmployee] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [searchInput, setSearchInput] = useState('');
+  const [shouldFetchData, setShouldFetchData] = useState(true);
 
   const dispatch = useDispatch();
   const {isLoading} = useSelector((state: RootState) => state.employee);
 
   useEffect(() => {
     fetchData();
-    // if (data) {
-    //   const dataEmployee = data.find(e => e.position === 1);
-    //   setListEmployee(dataEmployee);
-    // }
   }, []);
 
   const fetchData = async () => {
@@ -44,12 +41,13 @@ const ListEmployee: React.FC = ({}) => {
       method: 'GET',
     })
       .then(async responseData => {
-        console.log('responseUserInfomation', responseData);
+        console.log('responseListUser', responseData);
         dispatch(getListSuccess());
         setData(responseData);
+        setShouldFetchData(false);
       })
       .catch(error => {
-        console.log('errorUserInfomation', error);
+        console.log('errorListUser', error);
       });
   };
 
@@ -173,7 +171,7 @@ const ListEmployee: React.FC = ({}) => {
 
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate('AddEmployee');
+          navigation.navigate('AddEmployee', {data: data});
         }}
         style={styles.buttonAdd}
       >

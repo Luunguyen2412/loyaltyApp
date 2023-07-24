@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const KEY_ACCESS_TOKEN = 'access_token';
+export const USER_ID = 'user_id';
 
 export const getItem = key => {
   return new Promise(resolve => {

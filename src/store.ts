@@ -1,11 +1,13 @@
 import {configureStore} from '@reduxjs/toolkit';
 import LoginReducer from './container/Login/reducer';
 import EmployeeSlice from './container/Employee/reducer';
+import ProfileSlice from './container/Profile/reducer';
 
 export const store = configureStore({
   reducer: {
     auth: LoginReducer,
     employee: EmployeeSlice,
+    profile: ProfileSlice,
   },
 });
 

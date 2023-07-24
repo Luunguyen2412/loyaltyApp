@@ -18,6 +18,12 @@ export const EmployeeSlice = createSlice({
     getListSuccess: state => {
       state.isLoading = false;
     },
+    getUserSuccess: state => {
+      state.isLoading = false;
+    },
+    updateUserSuccess: state => {
+      state.isLoading = false;
+    },
     addEmployee: state => {
       state.isLoading = false;
     },
@@ -25,6 +31,12 @@ export const EmployeeSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const {isFetching, addEmployee, getListSuccess} = EmployeeSlice.actions;
+export const {
+  isFetching,
+  addEmployee,
+  getListSuccess,
+  getUserSuccess,
+  updateUserSuccess,
+} = EmployeeSlice.actions;
 
 export default EmployeeSlice.reducer;

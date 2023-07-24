@@ -31,6 +31,8 @@ const OrderScreen: React.FC = ({}) => {
 
   const [billPrice, setBillPrice] = useState(0);
 
+  const [cart, setCart] = useState([]);
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -58,6 +60,13 @@ const OrderScreen: React.FC = ({}) => {
       .catch(error => {
         console.error(error);
       });
+  };
+
+  const addItemToCart = item => {
+    // console.log('addddd', item);
+
+    const newItem = {item};
+    setCart([...cart, newItem]);
   };
 
   const onChangePrice = price => {
@@ -107,6 +116,7 @@ const OrderScreen: React.FC = ({}) => {
             onPress={() => {
               onChangePrice(item.price);
               increaseQuantity(index);
+              addItemToCart(item);
             }}
             style={styles.buttonAdd}
           >
@@ -190,7 +200,7 @@ const OrderScreen: React.FC = ({}) => {
         </Text>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('Payment');
+            navigation.navigate('Payment', {data: cart});
           }}
           style={{
             justifyContent: 'center',

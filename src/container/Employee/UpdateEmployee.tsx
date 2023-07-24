@@ -1,17 +1,21 @@
 import React, {useState, useEffect} from 'react';
-import {View, Dimensions, StyleSheet} from 'react-native';
+import {View, Dimensions, StyleSheet, Image} from 'react-native';
 import Colors from '../../constants/Colors';
 import MyTextInput from '../../components/MyTextInput';
 import MyButton from '../../components/MyButton';
 import {fetchAPI, urlHost} from '../../constants/ApiConstants';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import MyDropdown from '../../components/MyDropdown';
+import {useDispatch} from 'react-redux';
+import {isFetching, updateUserSuccess} from './reducer';
 
 let width = Dimensions.get('window').width;
 
 const UpdateEmployee: React.FC = ({}) => {
   const navigation = useNavigation();
+  const route = useRoute();
 
+  const [avatar, setAvatar] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isValidate, setIsValidate] = useState(false);
@@ -30,29 +34,33 @@ const UpdateEmployee: React.FC = ({}) => {
 
   const {data} = route.params;
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    // setAvatar(data.avatar);
+    setAvatar(data.avatar);
     setUsername(data.username);
+    setPassword(data.password);
     setPhone(data.phone);
     setPosition(data.position);
+    setGender(data.gender);
     setAddress(data.address);
     setUserId(data._id);
 
-    if (data.gender === 1) {
-      setGender('Nam');
-    } else if (data.gender === 2) {
-      setGender('Nữ');
-    } else {
-      setGender('');
-    }
+    // if (data.gender === 1) {
+    //   setGender('Nam');
+    // } else if (data.gender === 2) {
+    //   setGender('Nữ');
+    // } else {
+    //   setGender('');
+    // }
 
-    if (data.position === 1) {
-      setPosition('Admin');
-    } else if (data.position === 2) {
-      setPosition('Staff');
-    } else if (data.position === 3) {
-      setPosition('Customer');
-    }
+    // if (data.position === 1) {
+    //   setPosition('Admin');
+    // } else if (data.position === 2) {
+    //   setPosition('Staff');
+    // } else if (data.position === 3) {
+    //   setPosition('Customer');
+    // }
   }, [data]);
 
   const _updateEmployee = async (
@@ -76,13 +84,18 @@ const UpdateEmployee: React.FC = ({}) => {
       gender: genDer,
     };
 
+    dispatch(isFetching());
+
+    console.log('bodyyy', body);
+
     await fetchAPI({
       url: `${urlHost}/api/users/${userId}`,
       data: body,
       method: 'PUT',
     })
-      .then(async responseData => {
+      .then(responseData => {
         console.log('responseUpdateEmployee', responseData);
+        dispatch(updateUserSuccess());
         navigation.goBack();
       })
       .catch(error => {
@@ -98,6 +111,18 @@ const UpdateEmployee: React.FC = ({}) => {
           paddingTop: 20,
         }}
       >
+        <View style={{paddingVertical: 15}}>
+          <Image
+            style={{
+              backgroundColor: 'gray',
+              height: 100,
+              width: 100,
+              borderRadius: 50,
+              borderWidth: 1,
+            }}
+            source={{uri: avatar}}
+          />
+        </View>
         <MyDropdown
           isOpen={isOpenDropDownPosition}
           onPress={() => {
@@ -106,7 +131,7 @@ const UpdateEmployee: React.FC = ({}) => {
           placeholder="Chọn vị trí của bạn"
           itemDrops={[
             {label: 'Admin', value: 1},
-            {label: 'Nhân viên', value: 2},
+            {label: 'Staff', value: 2},
           ]}
           showTickIcon
           onSelectItemValues={values => {
@@ -134,14 +159,14 @@ const UpdateEmployee: React.FC = ({}) => {
           }}
         />
 
-        <MyTextInput
+        {/* <MyTextInput
           placeholder="Nhập mật khẩu của bạn"
           value={password}
           onChangeText={value => {
             setPassword(value);
             setIsValidate(false);
           }}
-        />
+        /> */}
 
         <MyDropdown
           isOpen={isOpenDropDownGender}

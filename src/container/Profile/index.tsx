@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {View, Dimensions, Image, StyleSheet} from 'react-native';
+import {
+  View,
+  Dimensions,
+  Image,
+  StyleSheet,
+  ActivityIndicator,
+  Text,
+} from 'react-native';
 import MyTextInput from '../../components/MyTextInput';
 import Colors from '../../constants/Colors';
 import MyButton from '../../components/MyButton';
@@ -8,17 +15,24 @@ import {logOut} from '../Login/reducer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {fetchAPI, urlHost} from '../../constants/ApiConstants';
 import {RootState} from '../../store';
+import {getProfile, isFetching} from './reducer';
+import {USER_ID} from '../../common/storage';
 
 let width = Dimensions.get('window').width;
 
 const ProfileScreen: React.FC = () => {
   const dispatch = useDispatch();
 
-  const [position, setPosition] = useState(''); // 1 - Admin, 2 - Staff
+  const [data, setData] = useState();
 
-  const [gender, setGender] = useState(''); // 1 - Male, 2 - Female;
+  const [position, setPosition] = useState(); // 1 - Admin, 2 - Staff
 
+  const [gender, setGender] = useState(); // 1 - Male, 2 - Female;
+
+  const {isLoading} = useSelector((state: RootState) => state.profile);
   const {dataUser} = useSelector((state: RootState) => state.auth);
+
+  // console.log('datauser', dataUser);
 
   const onLogOut = async () => {
     await AsyncStorage.clear();
@@ -26,18 +40,42 @@ const ProfileScreen: React.FC = () => {
   };
 
   useEffect(() => {
-    if (dataUser.gender === 1) {
-      setGender('Nam');
-    } else {
-      setGender('Nữ');
-    }
-
-    if (dataUser.position === 1) {
-      setPosition('Admin');
-    } else {
-      setPosition('Staff');
-    }
+    getInfomation();
   }, []);
+
+  const getInfomation = async () => {
+    const user_id = await AsyncStorage.getItem(USER_ID);
+    console.log('user_id', user_id);
+
+    if (!user_id) {
+      return;
+    }
+    dispatch(isFetching());
+
+    await fetchAPI({
+      url: `${urlHost}/api/users/${user_id}`,
+      method: 'GET',
+    })
+      .then(async responseData => {
+        console.log('responseProfileInfomation', responseData);
+        dispatch(getProfile());
+        setData(responseData.data);
+
+        if (responseData.data.gender === 1) {
+          setGender('Nam');
+        } else {
+          setGender('Nữ');
+        }
+        if (responseData.data.position === 1) {
+          setPosition('Admin');
+        } else {
+          setPosition('Staff');
+        }
+      })
+      .catch(error => {
+        console.log('errorProfileInfomation', error);
+      });
+  };
 
   return (
     <View
@@ -49,30 +87,49 @@ const ProfileScreen: React.FC = () => {
         backgroundColor: Colors.white,
       }}
     >
-      <View style={{paddingVertical: 30}}>
-        <Image
+      {isLoading ? (
+        <View
           style={{
-            backgroundColor: 'gray',
-            height: 100,
-            width: 100,
-            borderRadius: 50,
-            borderWidth: 1,
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
-          source={{uri: dataUser.avatar}}
-        />
-      </View>
+        >
+          <ActivityIndicator size="large" color={Colors.PRIMARY} />
+        </View>
+      ) : (
+        <>
+          {data ? (
+            <>
+              <View style={{paddingVertical: 30}}>
+                <Image
+                  style={{
+                    backgroundColor: 'gray',
+                    height: 100,
+                    width: 100,
+                    borderRadius: 50,
+                    borderWidth: 1,
+                  }}
+                  source={{uri: data.avatar}}
+                />
+              </View>
 
-      <View>
-        <MyTextInput value={dataUser.username} editable={false} />
-        <MyTextInput value={dataUser.phone} editable={false} />
-        <MyTextInput value={position} editable={false} />
-        <MyTextInput value={gender} editable={false} />
-        <MyTextInput value={dataUser.address} editable={false} />
-      </View>
-
-      <View style={{marginTop: 50}}>
-        <MyButton onPress={onLogOut} style={styles.button} text="Log out" />
-      </View>
+              <View>
+                <MyTextInput value={data.username} editable={false} />
+                <MyTextInput value={data.phone} editable={false} />
+                <MyTextInput value={position} editable={false} />
+                <MyTextInput value={gender} editable={false} />
+                <MyTextInput value={data.address} editable={false} />
+              </View>
+            </>
+          ) : (
+            <Text>Khong co du lieu</Text>
+          )}
+          <View style={{marginTop: 50}}>
+            <MyButton onPress={onLogOut} style={styles.button} text="Log out" />
+          </View>
+        </>
+      )}
     </View>
   );
 };

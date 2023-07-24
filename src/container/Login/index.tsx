@@ -15,7 +15,7 @@ import {useNavigation} from '@react-navigation/native';
 import {fetchAPI, urlHost} from '../../constants/ApiConstants';
 import {RootState} from '../../store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {KEY_ACCESS_TOKEN} from '../../common/storage';
+import {KEY_ACCESS_TOKEN, USER_ID} from '../../common/storage';
 
 let width = Dimensions.get('window').width;
 
@@ -73,6 +73,8 @@ const LoginScreen: React.FC = ({}) => {
             responseData.accessToken,
           );
 
+          await AsyncStorage.setItem(USER_ID, responseData.data._id);
+
           dispatch(goToMain());
           dispatch(saveDataUser(responseData.data));
         }
@@ -110,6 +112,7 @@ const LoginScreen: React.FC = ({}) => {
         <MyTextInput
           placeholder={'Nhập số điện thoại'}
           value={username}
+          keyboardType="number-pad"
           onChangeText={value => {
             setUsername(value);
             setIsValidate(false);
@@ -118,6 +121,7 @@ const LoginScreen: React.FC = ({}) => {
         <MyTextInput
           placeholder="Nhập password"
           value={password}
+          keyboardType="number-pad"
           onChangeText={value => {
             setPassword(value);
             setIsValidate(false);
