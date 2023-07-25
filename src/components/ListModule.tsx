@@ -1,25 +1,52 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Colors from '../constants/Colors';
 import {Text, View, TouchableOpacity, StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {RootState} from '../store';
+import {useSelector} from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {USER_ID} from '../common/storage';
+import {enableLayoutAnimations} from 'react-native-reanimated';
 
-// type MyListModuleProps = {
-//   nameTitle: string;
-//   navigation: () => void;
-// };
+type MyListModuleProps = {
+  listModule: [];
+};
 
-const MyListModule: React.FC = ({listModule}) => {
+const MyListModule = ({listModule}: MyListModuleProps) => {
   const navigation = useNavigation();
+
+  const [data, setData] = useState([]);
+
+  const {dataUser} = useSelector((state: RootState) => state.profile);
+
+  const [permissionUser, setPermissionUser] = useState(dataUser.position);
+
+  // console.log('dataUser', dataUser);
+
+  // console.log('permissisonnn', permissionUser);
+
+  useEffect(() => {
+    const listForEmployee = listModule.filter(item => item.permission === 2);
+    if (permissionUser === 1) {
+      // 1 - admin
+      setData(listModule);
+    } else {
+      // 2 - staff
+      setData(listForEmployee);
+    }
+  }, [dataUser]);
 
   return (
     <View style={styles.module}>
-      {listModule.map((ele, index) => {
+      {data.map((ele, index) => {
         return (
           <TouchableOpacity
             key={index.toString()}
             style={styles.container}
-            onPress={() => navigation.navigate(ele.navigate)}
+            onPress={() => {
+              navigation.navigate(ele.navigate);
+            }}
           >
             <View style={styles.styleButton}>
               <FontAwesome5

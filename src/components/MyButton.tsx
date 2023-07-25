@@ -1,43 +1,45 @@
 import React from 'react';
 import Colors from '../constants/Colors';
-import {Text, View, TouchableOpacity} from 'react-native';
+import {Text, View, TouchableOpacity, StyleProp, ViewStyle} from 'react-native';
 
 type MyButtonProps = {
   text: string;
   onPress: () => void;
-  keyboardType: string;
-  value: string;
-  enable: boolean;
-  textColor: string;
+  disabled?: boolean;
+  textColor?: string;
+  style?: StyleProp<ViewStyle>;
 };
 
-const MyButton: React.FC = ({
+const MyButton = ({
   text,
   onPress,
   style,
-  enable = true,
+  disabled = false,
   textColor = Colors.white,
 }: MyButtonProps) => {
   return (
-    <TouchableOpacity onPress={onPress}>
-      <View
-        style={[
-          style,
-          {
-            backgroundColor: enable ? style.backgroundColor : Colors.grey,
-          },
-        ]}
+    <TouchableOpacity
+      style={[
+        {
+          // backgroundColor: enable ? style.backgroundColor : Colors.grey,
+          backgroundColor: Colors.PRIMARY,
+        },
+        disabled && {
+          backgroundColor: Colors.grey,
+        },
+        style,
+      ]}
+      onPress={onPress}
+    >
+      <Text
+        style={{
+          color: textColor,
+          fontSize: 20,
+          fontWeight: '500',
+        }}
       >
-        <Text
-          style={{
-            color: textColor,
-            fontSize: 20,
-            fontWeight: '500',
-          }}
-        >
-          {text}
-        </Text>
-      </View>
+        {text}
+      </Text>
     </TouchableOpacity>
   );
 };

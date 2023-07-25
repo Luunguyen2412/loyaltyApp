@@ -2,10 +2,12 @@ import {createSlice} from '@reduxjs/toolkit';
 
 export interface ProfileState {
   isLoading: boolean;
+  dataUser: {};
 }
 
 const initialState: ProfileState = {
   isLoading: true,
+  dataUser: {},
 };
 
 export const ProfileSlice = createSlice({
@@ -15,8 +17,9 @@ export const ProfileSlice = createSlice({
     isFetching: state => {
       state.isLoading = true;
     },
-    getProfile: state => {
+    getProfile: (state, action) => {
       state.isLoading = false;
+      state.dataUser = action.payload;
     },
   },
 });

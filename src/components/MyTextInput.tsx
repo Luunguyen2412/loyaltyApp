@@ -10,6 +10,7 @@ const MyTextInput = (props: TextInputProps) => {
       placeholderTextColor={Colors.grey}
       selectionColor={Colors.PRIMARY50}
       style={styles.textInput}
+      // editable={editable}
       {...props}
     />
   );

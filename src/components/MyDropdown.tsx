@@ -48,17 +48,17 @@ const MyDropdown: React.FC = ({
         showArrowIcon
         showTickIcon={showTickIcon}
         TickIconComponent={({style}) => {
-          <FontAwesome5 name={'plus'} size={20} color={Colors.white} />;
+          <FontAwesome5 name={'chevron-up'} size={16} color={Colors.black} />;
         }}
         tickIconStyle={{height: 20, width: 20}}
         mode="BADGE"
         theme="LIGHT"
         searchable={false}
         ArrowUpIconComponent={({style}) => (
-          <FontAwesome5 name={'plus'} size={20} color={Colors.white} />
+          <FontAwesome5 name={'chevron-up'} size={16} color={Colors.black} />
         )}
         ArrowDownIconComponent={({style}) => (
-          <FontAwesome5 name={'plus'} size={20} color={Colors.white} />
+          <FontAwesome5 name={'chevron-down'} size={16} color={Colors.black} />
         )}
         arrowIconStyle={{
           width: 30,

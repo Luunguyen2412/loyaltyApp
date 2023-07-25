@@ -1,5 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {View, Dimensions, StyleSheet, Image} from 'react-native';
+import {
+  View,
+  Dimensions,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Text,
+} from 'react-native';
 import Colors from '../../constants/Colors';
 import MyTextInput from '../../components/MyTextInput';
 import MyButton from '../../components/MyButton';
@@ -8,6 +15,7 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import MyDropdown from '../../components/MyDropdown';
 import {useDispatch} from 'react-redux';
 import {isFetching, updateUserSuccess} from './reducer';
+import ImagePicker from 'react-native-image-crop-picker';
 
 let width = Dimensions.get('window').width;
 
@@ -36,8 +44,10 @@ const UpdateEmployee: React.FC = ({}) => {
 
   const dispatch = useDispatch();
 
+  console.log('avatarrrr', avatar);
+
   useEffect(() => {
-    setAvatar(data.avatar);
+    // setAvatar(data.avatar);
     setUsername(data.username);
     setPassword(data.password);
     setPhone(data.phone);
@@ -45,25 +55,10 @@ const UpdateEmployee: React.FC = ({}) => {
     setGender(data.gender);
     setAddress(data.address);
     setUserId(data._id);
-
-    // if (data.gender === 1) {
-    //   setGender('Nam');
-    // } else if (data.gender === 2) {
-    //   setGender('Nữ');
-    // } else {
-    //   setGender('');
-    // }
-
-    // if (data.position === 1) {
-    //   setPosition('Admin');
-    // } else if (data.position === 2) {
-    //   setPosition('Staff');
-    // } else if (data.position === 3) {
-    //   setPosition('Customer');
-    // }
-  }, [data]);
+  }, []);
 
   const _updateEmployee = async (
+    avaTar,
     userName,
     phoneNumber,
     pass,
@@ -76,6 +71,7 @@ const UpdateEmployee: React.FC = ({}) => {
     }
 
     const body = {
+      avatar: avaTar,
       username: userName,
       phone: phoneNumber,
       password: pass,
@@ -86,7 +82,7 @@ const UpdateEmployee: React.FC = ({}) => {
 
     dispatch(isFetching());
 
-    console.log('bodyyy', body);
+    // console.log('bodyyy', body);
 
     await fetchAPI({
       url: `${urlHost}/api/users/${userId}`,
@@ -103,6 +99,17 @@ const UpdateEmployee: React.FC = ({}) => {
       });
   };
 
+  const handlePickImage = () => {
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      cropping: true,
+    }).then(image => {
+      console.log('imageeee', image);
+      setAvatar(image.path);
+    });
+  };
+
   return (
     <View style={styles.container}>
       <View
@@ -111,17 +118,28 @@ const UpdateEmployee: React.FC = ({}) => {
           paddingTop: 20,
         }}
       >
-        <View style={{paddingVertical: 15}}>
+        <View
+          style={{
+            paddingVertical: 15,
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}
+        >
           <Image
-            style={{
-              backgroundColor: 'gray',
-              height: 100,
-              width: 100,
-              borderRadius: 50,
-              borderWidth: 1,
-            }}
+            style={styles.avatarContainer}
             source={{uri: avatar}}
+            resizeMode="contain"
           />
+          <TouchableOpacity
+            style={styles.buttonPickImg}
+            onPress={() => handlePickImage()}
+          >
+            <Text
+              style={{fontSize: 14, color: Colors.white, fontWeight: '500'}}
+            >
+              Chọn ảnh từ thư viện
+            </Text>
+          </TouchableOpacity>
         </View>
         <MyDropdown
           isOpen={isOpenDropDownPosition}
@@ -142,6 +160,7 @@ const UpdateEmployee: React.FC = ({}) => {
         />
 
         <MyTextInput
+          style={styles.textInput}
           placeholder="Nhập họ tên của bạn"
           value={username}
           onChangeText={value => {
@@ -150,6 +169,7 @@ const UpdateEmployee: React.FC = ({}) => {
           }}
         />
         <MyTextInput
+          style={styles.textInput}
           placeholder="Nhập số điện thoại của bạn"
           value={phone}
           keyboardType="number-pad"
@@ -186,6 +206,7 @@ const UpdateEmployee: React.FC = ({}) => {
           value={gender}
         />
         <MyTextInput
+          style={styles.textInput}
           placeholder="Nhập địa chỉ của bạn"
           value={address}
           onChangeText={value => {
@@ -218,7 +239,15 @@ const UpdateEmployee: React.FC = ({}) => {
           style={styles.button}
           text="Lưu"
           onPress={() =>
-            _updateEmployee(username, phone, password, position, address)
+            _updateEmployee(
+              avatar,
+              username,
+              phone,
+              password,
+              position,
+              address,
+              gender,
+            )
           }
         />
       </View>
@@ -227,6 +256,35 @@ const UpdateEmployee: React.FC = ({}) => {
 };
 
 const styles = StyleSheet.create({
+  buttonPickImg: {
+    alignItems: 'center',
+    backgroundColor: Colors.PRIMARY,
+    borderRadius: 10,
+    color: Colors.white,
+    justifyContent: 'center',
+    paddingHorizontal: 10,
+    height: 50,
+    marginLeft: 20,
+  },
+  textInput: {
+    paddingHorizontal: 10,
+    alignItems: 'center',
+    borderWidth: 1,
+    flexDirection: 'row',
+    height: 50,
+    width: width * 0.9,
+    borderRadius: 10,
+    borderColor: Colors.black,
+    marginBottom: 15,
+    color: Colors.black,
+  },
+  avatarContainer: {
+    backgroundColor: 'gray',
+    height: 100,
+    width: 100,
+    borderRadius: 50,
+    borderWidth: 1,
+  },
   container: {
     flex: 1,
     paddingHorizontal: 20,

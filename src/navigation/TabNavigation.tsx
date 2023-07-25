@@ -25,19 +25,19 @@ const TabNavigation: React.FC = () => {
       }}
     >
       <Tab.Screen
-        name="HomeScreen"
-        component={HomeScreen}
-        options={{
-          tabBarIcon: ({focused}) => <SvgHome active={focused} />,
-          tabBarLabel: 'Home',
-        }}
-      />
-      <Tab.Screen
         name="ProfileScreen"
         component={ProfileScreen}
         options={{
           tabBarIcon: ({focused}) => <SvgPages active={focused} />,
           tabBarLabel: 'Profile',
+        }}
+      />
+      <Tab.Screen
+        name="HomeScreen"
+        component={HomeScreen}
+        options={{
+          tabBarIcon: ({focused}) => <SvgHome active={focused} />,
+          tabBarLabel: 'Home',
         }}
       />
     </Tab.Navigator>

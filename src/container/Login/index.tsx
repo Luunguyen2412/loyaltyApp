@@ -45,15 +45,15 @@ const LoginScreen: React.FC = ({}) => {
     }
   };
 
-  const onLogIn = async (phone, pass) => {
-    if (phone === '' || pass === '') {
+  const onLogIn = async () => {
+    if (username === '' || password === '') {
       setIsValidate(true);
     }
 
     dispatch(isFetching());
     const body = {
-      phone: phone,
-      password: pass,
+      phone: username,
+      password: password,
     };
 
     await fetchAPI({
@@ -75,8 +75,8 @@ const LoginScreen: React.FC = ({}) => {
 
           await AsyncStorage.setItem(USER_ID, responseData.data._id);
 
-          dispatch(goToMain());
           dispatch(saveDataUser(responseData.data));
+          dispatch(goToMain());
         }
       })
       .catch(error => {
@@ -142,7 +142,7 @@ const LoginScreen: React.FC = ({}) => {
           style={styles.LoginButton}
           text="Đăng nhập"
           onPress={() => {
-            onLogIn(username, password);
+            onLogIn();
           }}
         />
 

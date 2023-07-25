@@ -32,8 +32,6 @@ const ProfileScreen: React.FC = () => {
   const {isLoading} = useSelector((state: RootState) => state.profile);
   const {dataUser} = useSelector((state: RootState) => state.auth);
 
-  // console.log('datauser', dataUser);
-
   const onLogOut = async () => {
     await AsyncStorage.clear();
     dispatch(logOut());
@@ -58,7 +56,7 @@ const ProfileScreen: React.FC = () => {
     })
       .then(async responseData => {
         console.log('responseProfileInfomation', responseData);
-        dispatch(getProfile());
+        dispatch(getProfile(responseData.data));
         setData(responseData.data);
 
         if (responseData.data.gender === 1) {

@@ -15,6 +15,8 @@ import MyButton from '../../components/MyButton';
 import {BottomSheetModal, BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import MyBottomSheet from '../../components/MyBottomSheet';
+import {fetchAPI, urlHost} from '../../constants/ApiConstants';
 
 let width = Dimensions.get('window').width;
 
@@ -79,20 +81,15 @@ const PaymentScreen: React.FC = () => {
 
   const [selectedPayment, setSelectedPayment] = useState(null);
 
-  // ref
-  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const [listCustomers, setListCustomers] = useState([]);
 
-  // variables
-  const snapPoints = useMemo(() => ['25%', '90%'], []);
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
 
-  // callbacks
-  const handlePresentModalPress = useCallback(() => {
-    bottomSheetModalRef.current?.present();
-  }, []);
+  const [subTotal, setSubtotal] = useState(0);
+  const [discount, setDiscount] = useState(0);
 
-  const handleSheetChanges = useCallback((index: number) => {
-    console.log('handleSheetChanges', index);
-  }, []);
+  const [deliveryCharge, setDeliveryCharge] = useState(0);
+  const [orderTotal, setOrderTotal] = useState(0);
 
   const handleSelectDeliveryPress = option => {
     setSelectedDeliveryOption(option);
@@ -112,6 +109,57 @@ const PaymentScreen: React.FC = () => {
     {id: 2, label: 'Momo'},
     {id: 3, label: 'Banking'},
   ];
+
+  //ref
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+
+  // variables
+  const snapPoints = useMemo(() => ['25%', '80%'], []);
+
+  // callbacks
+  const handlePresentModalPress = useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
+
+  // onChange
+  const handleSheetChanges = useCallback((index: number) => {
+    console.log('handleSheetChanges', index);
+  }, []);
+
+  const getListCustomers = async () => {
+    // dispatch(isFetching());
+
+    await fetchAPI({
+      url: `${urlHost}/api/contacts`,
+      method: 'GET',
+    })
+      .then(async responseData => {
+        console.log('responseListContacts', responseData);
+        setListCustomers(responseData);
+      })
+      .catch(error => {
+        console.log('errorListContacts', error);
+      });
+  };
+
+  const addCustomer = item => {
+    setSelectedCustomer(item);
+  };
+
+  const renderSearchItem = ({item, index}) => {
+    return (
+      <TouchableOpacity
+        style={{flexDirection: 'row', padding: 10}}
+        onPress={() => {
+          addCustomer(item);
+        }}
+      >
+        <Text
+          style={{color: Colors.black, fontSize: 16, fontWeight: '500'}}
+        >{`${item.name} - ${item.phone}`}</Text>
+      </TouchableOpacity>
+    );
+  };
 
   const renderItem = ({item, index}) => {
     return (
@@ -169,186 +217,293 @@ const PaymentScreen: React.FC = () => {
   };
 
   return (
-    <BottomSheetModalProvider>
-      <View
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: Colors.white,
+      }}
+    >
+      <ScrollView
         style={{
           flex: 1,
-          backgroundColor: Colors.white,
+          paddingHorizontal: 20,
+          paddingTop: 10,
         }}
       >
-        <ScrollView
-          style={{
-            flex: 1,
-            paddingHorizontal: 20,
-            paddingTop: 10,
-          }}
-        >
-          <FlatList data={data} renderItem={renderItem} />
+        <FlatList data={data} renderItem={renderItem} />
 
-          <View style={styles.card}>
+        <View style={styles.card}>
+          {/* <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}
+          >
+            <MyTextInput
+              style={styles.searchCustomer}
+              placeholder={'Tìm kiếm Khách hàng'}
+              value={search}
+              onChangeText={value => {
+                // setSearch(value);
+              }}
+            />
+            <TouchableOpacity
+              onPress={() => {
+                // searchItem(search);
+              }}
+              style={{
+                justifyContent: 'center',
+                paddingHorizontal: 15,
+                height: 50,
+                backgroundColor: Colors.PRIMARY,
+                borderRadius: 10,
+              }}
+            >
+              <FontAwesome5 name={'search'} size={16} color={Colors.white} />
+            </TouchableOpacity>
+          </View> */}
+          {selectedCustomer && (
             <View
               style={{
                 flexDirection: 'row',
-                justifyContent: 'space-between',
+                paddingVertical: 10,
+                paddingLeft: 10,
+                alignItems: 'center',
+                borderRadius: 10,
+                borderWidth: 0.5,
+                borderColor: Colors.grey,
+                marginBottom: 10,
               }}
             >
-              <MyTextInput
-                style={styles.searchCustomer}
-                placeholder={'Tìm kiếm Khách hàng'}
-                value={search}
-                onChangeText={value => {
-                  // setSearch(value);
-                }}
-              />
               <TouchableOpacity
                 onPress={() => {
-                  // searchItem(search);
+                  setSelectedCustomer();
                 }}
+                hitSlop={{top: 5, bottom: 5, left: 5}}
                 style={{
-                  justifyContent: 'center',
-                  paddingHorizontal: 15,
-                  height: 50,
-                  backgroundColor: Colors.PRIMARY,
-                  borderRadius: 10,
+                  marginRight: 8,
                 }}
               >
-                <FontAwesome5 name={'search'} size={16} color={Colors.white} />
+                <Image
+                  style={{
+                    height: 20,
+                    width: 20,
+                    borderRadius: 20,
+                    backgroundColor: 'red',
+                  }}
+                />
               </TouchableOpacity>
+              <Image
+                style={{
+                  height: 32,
+                  width: 32,
+                  marginHorizontal: 8,
+                  borderRadius: 44,
+                  backgroundColor: Colors.grey,
+                }}
+                source={{
+                  uri: selectedCustomer.avatar,
+                }}
+              />
+              <Text
+                style={{
+                  color: Colors.black,
+                  fontSize: 16,
+                  fontWeight: '500',
+                }}
+              >{`${selectedCustomer.name} - ${selectedCustomer.phone}`}</Text>
             </View>
-            <MyButton
-              style={styles.buttonAddCustomer}
-              text="Thêm khách hàng"
-              onPress={handlePresentModalPress}
-            />
-            <BottomSheetModal
-              ref={bottomSheetModalRef}
-              index={1}
-              snapPoints={snapPoints}
-              onChange={handleSheetChanges}
+          )}
+          <MyButton
+            style={styles.buttonAddCustomer}
+            text="Thêm khách hàng"
+            onPress={() => {
+              getListCustomers();
+              handlePresentModalPress();
+            }}
+          />
+          <BottomSheetModal
+            ref={bottomSheetModalRef}
+            index={1}
+            snapPoints={snapPoints}
+            onChange={handleSheetChanges}
+          >
+            <View
+              style={{
+                flex: 1,
+                paddingHorizontal: 10,
+                // alignItems: 'center',
+                // backgroundColor: Colors.grey,
+              }}
             >
               <View
                 style={{
-                  flex: 1,
-                  alignItems: 'center',
+                  flexDirection: 'row',
+                  justifyContent: 'center',
                 }}
               >
-                <Text>Awesome 🎉</Text>
-              </View>
-            </BottomSheetModal>
-          </View>
-
-          <View style={styles.card}>
-            <Text
-              style={{
-                color: Colors.black,
-                fontWeight: '500',
-                fontSize: 18,
-              }}
-            >
-              Delivery Option
-            </Text>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                paddingTop: 10,
-              }}
-            >
-              {deliveryOptions.map(option => (
-                <RadioButton
+                <MyTextInput
                   style={{
+                    marginRight: 15,
+                    alignItems: 'center',
+                    borderWidth: 1,
                     flexDirection: 'row',
+                    height: 50,
+                    width: width * 0.7,
+                    borderRadius: 10,
+                    borderColor: Colors.grey,
+                    marginBottom: 15,
+                    color: Colors.black,
+                  }}
+                  placeholder={'Tìm kiếm Khách hàng'}
+                  value={search}
+                  onChangeText={value => {
+                    // setSearch(value);
+                  }}
+                />
+                <TouchableOpacity
+                  onPress={() => {
+                    // searchItem(search);
+                  }}
+                  style={{
                     justifyContent: 'center',
-                    marginRight: 20,
+                    paddingHorizontal: 15,
+                    height: 50,
+                    backgroundColor: Colors.PRIMARY,
+                    borderRadius: 10,
                   }}
-                  key={option.id}
-                  label={option.label}
-                  checked={selectedDeliveryOption === option.id}
-                  onPress={() => handleSelectDeliveryPress(option.id)}
-                />
-              ))}
+                >
+                  <FontAwesome5
+                    name={'search'}
+                    size={16}
+                    color={Colors.white}
+                  />
+                </TouchableOpacity>
+              </View>
+              <FlatList data={listCustomers} renderItem={renderSearchItem} />
             </View>
-          </View>
+          </BottomSheetModal>
+          {/* <MyBottomSheet
+            ref={bottomSheetModalRef}
+            index={1}
+            snapPoints={snapPoints}
+            onChange={handleSheetChanges}
+            data={listCustomers}
+            renderItem={renderSearchItem}
+          /> */}
+        </View>
 
-          <View style={styles.card}>
+        <View style={styles.card}>
+          <Text
+            style={{
+              color: Colors.black,
+              fontWeight: '500',
+              fontSize: 18,
+            }}
+          >
+            Delivery Option
+          </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              paddingTop: 10,
+            }}
+          >
+            {deliveryOptions.map(option => (
+              <RadioButton
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  marginRight: 20,
+                }}
+                key={option.id}
+                label={option.label}
+                checked={selectedDeliveryOption === option.id}
+                onPress={() => handleSelectDeliveryPress(option.id)}
+              />
+            ))}
+          </View>
+        </View>
+
+        <View style={styles.card}>
+          <Text
+            style={{
+              color: Colors.black,
+              fontWeight: '500',
+              fontSize: 18,
+            }}
+          >
+            Order Summary
+          </Text>
+          <PriceHeaderBar lable={'Subtotals'} price={'80.000'} />
+          <PriceHeaderBar lable={'Discount'} price={'0.000'} />
+
+          <PriceHeaderBar lable={'Delivery Charges'} price={'20.000'} />
+
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              paddingTop: 10,
+            }}
+          >
             <Text
               style={{
                 color: Colors.black,
-                fontWeight: '500',
-                fontSize: 18,
+                fontWeight: 'bold',
+                fontSize: 16,
               }}
             >
-              Order Summary
+              Order Total
             </Text>
-            <PriceHeaderBar lable={'Subtotals'} price={'80.000'} />
-            <PriceHeaderBar lable={'Discount'} price={'0.000'} />
-
-            <PriceHeaderBar lable={'Delivery Charges'} price={'20.000'} />
-
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                paddingTop: 10,
-              }}
-            >
-              <Text
-                style={{
-                  color: Colors.black,
-                  fontWeight: 'bold',
-                  fontSize: 16,
-                }}
-              >
-                Order Total
-              </Text>
-              <Text
-                style={{
-                  color: Colors.black,
-                  fontWeight: 'bold',
-                  fontSize: 16,
-                }}
-              >
-                100.000
-              </Text>
-            </View>
-          </View>
-
-          <View style={styles.card}>
             <Text
               style={{
                 color: Colors.black,
-                fontWeight: '500',
-                fontSize: 18,
+                fontWeight: 'bold',
+                fontSize: 16,
               }}
             >
-              Payment Method
+              100.000
             </Text>
-            <View
-              style={{
-                justifyContent: 'flex-start',
-              }}
-            >
-              {paymentMethods.map(option => (
-                <RadioButton
-                  style={{
-                    justifyContent: 'flex-start',
-                    flexDirection: 'row',
-                    marginTop: 10,
-                  }}
-                  key={option.id}
-                  label={option.label}
-                  checked={selectedPayment === option.id}
-                  onPress={() => handleSelectPayment(option.id)}
-                />
-              ))}
-            </View>
           </View>
-          <MyButton style={styles.buttonPayment} text="Thanh toán" />
+        </View>
 
-          <View style={{height: 20}} />
-        </ScrollView>
-      </View>
-    </BottomSheetModalProvider>
+        <View style={styles.card}>
+          <Text
+            style={{
+              color: Colors.black,
+              fontWeight: '500',
+              fontSize: 18,
+            }}
+          >
+            Payment Method
+          </Text>
+          <View
+            style={{
+              justifyContent: 'flex-start',
+            }}
+          >
+            {paymentMethods.map(option => (
+              <RadioButton
+                style={{
+                  justifyContent: 'flex-start',
+                  flexDirection: 'row',
+                  marginTop: 10,
+                }}
+                key={option.id}
+                label={option.label}
+                checked={selectedPayment === option.id}
+                onPress={() => handleSelectPayment(option.id)}
+              />
+            ))}
+          </View>
+        </View>
+        <MyButton style={styles.buttonPayment} text="Thanh toán" />
+
+        <View style={{height: 20}} />
+      </ScrollView>
+    </View>
   );
 };
 

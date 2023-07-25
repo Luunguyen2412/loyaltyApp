@@ -36,7 +36,7 @@ const ListCustomer: React.FC = ({}) => {
     await fetch(`${urlHost}/api/contacts`)
       .then(response => response.json())
       .then(responseData => {
-        console.log('response', responseData);
+        console.log('responseListCustomer', responseData);
         // dispatch(getListSuccess());
         setData(responseData);
       })
@@ -123,7 +123,7 @@ const ListCustomer: React.FC = ({}) => {
         />
       </View> */}
 
-      {isLoading ? (
+      {/* {isLoading ? (
         <View
           style={{
             flex: 1,
@@ -133,19 +133,19 @@ const ListCustomer: React.FC = ({}) => {
         >
           <ActivityIndicator size="large" color={Colors.PRIMARY} />
         </View>
-      ) : (
-        <FlatList
-          refreshControl={
-            <RefreshControl
-              tintColor={Colors.black}
-              refreshing={refreshing}
-              onRefresh={handleRefresh}
-            />
-          }
-          data={data}
-          renderItem={renderItem}
-        />
-      )}
+      ) : ( */}
+      <FlatList
+        refreshControl={
+          <RefreshControl
+            tintColor={Colors.black}
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+          />
+        }
+        data={data}
+        renderItem={renderItem}
+      />
+      {/* )} */}
 
       <TouchableOpacity
         onPress={() => {

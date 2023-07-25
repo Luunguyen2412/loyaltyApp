@@ -1,11 +1,23 @@
-import React, {useEffect, useState} from 'react';
-import {View, Button, Text, TouchableOpacity} from 'react-native';
+import React from 'react';
+import {View} from 'react-native';
 import {useDispatch} from 'react-redux';
-import {logOut} from '../Login/reducer';
-import Colors from '../../constants/Colors';
-import MyHeader from '../../components/MyHeader';
 import MyListModule from '../../components/ListModule';
 import {useNavigation} from '@react-navigation/native';
+
+type TUserPermission = 'seeEmployeeManagement' | 'seeOrderProducts';
+type TUserPosition = 1 | 2;
+
+const userPermissions: Record<TUserPosition, TUserPermission[]> = {
+  '1': ['seeEmployeeManagement'],
+  '2': [],
+};
+
+const hasPermission = (
+  position: TUserPosition,
+  permission: TUserPermission,
+) => {
+  return userPermissions[position].includes(permission);
+};
 
 const listModule = [
   {
@@ -13,24 +25,28 @@ const listModule = [
     name: 'Employee\nManagement',
     navigate: 'EmployeeManage',
     icon: 'user',
+    permission: 1,
   },
   {
     id: 2,
     name: 'Order\nProducts',
     navigate: 'OrderScreen',
     icon: 'wallet',
+    permission: 2,
   },
   {
     id: 3,
     name: 'Customer\nmanagement',
     navigate: 'ListCustomer',
     icon: 'users',
+    permission: 2,
   },
   {
     id: 4,
     name: 'File\nManagement',
     navigate: '',
     icon: 'file',
+    permission: 2,
   },
 ];
 
@@ -41,7 +57,6 @@ const HomeScreen: React.FC = ({}) => {
 
   return (
     <View style={{flex: 1}}>
-      {/* <MyHeader nameTitle={'HRM Management'} /> */}
       <View
         style={{
           paddingHorizontal: 20,

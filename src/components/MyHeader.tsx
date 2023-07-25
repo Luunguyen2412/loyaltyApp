@@ -1,24 +1,23 @@
 import React from 'react';
 import Colors from '../constants/Colors';
-import { Text, View } from 'react-native';
+import {Text, View} from 'react-native';
 
 type MyHeaderProps = {
   nameTitle: string;
   onPress: () => void;
 };
 
-const MyHeader: React.FC = ({ nameTitle, onPress }: MyHeaderProps) => {
+const MyHeader = ({nameTitle, onPress}: MyHeaderProps) => {
   return (
     <View
       style={{
         height: 64,
-        backgroundColor: Colors.PRIMARY,
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
       }}
     >
-      <View style={{ backgroundColor: Colors.white, flex: 1.5 }}>
+      <View style={{backgroundColor: Colors.white, flex: 1.5}}>
         {/* <Text>hrm</Text> */}
       </View>
       <Text
@@ -31,7 +30,7 @@ const MyHeader: React.FC = ({ nameTitle, onPress }: MyHeaderProps) => {
       >
         {nameTitle}
       </Text>
-      <View style={{ backgroundColor: Colors.white, flex: 2 }} />
+      <View style={{backgroundColor: Colors.white, flex: 2}} />
     </View>
   );
 };
