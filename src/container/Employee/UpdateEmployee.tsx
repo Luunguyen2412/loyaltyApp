@@ -44,10 +44,8 @@ const UpdateEmployee: React.FC = ({}) => {
 
   const dispatch = useDispatch();
 
-  console.log('avatarrrr', avatar);
-
   useEffect(() => {
-    // setAvatar(data.avatar);
+    setAvatar(data.avatar);
     setUsername(data.username);
     setPassword(data.password);
     setPhone(data.phone);

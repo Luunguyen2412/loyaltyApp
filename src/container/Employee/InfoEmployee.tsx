@@ -116,6 +116,7 @@ const InfoEmployee: React.FC = ({}) => {
                       borderWidth: 1,
                     }}
                     source={{uri: dataUser.avatar}}
+                    resizeMode="contain"
                   />
                 </View>
                 <MyTextInput

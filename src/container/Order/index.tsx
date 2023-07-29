@@ -39,11 +39,12 @@ const OrderScreen: React.FC = ({}) => {
 
   const fetchData = async () => {
     await fetchAPI({
-      url: 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=',
+      // url: 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=',
+      url: `${urlHost}/api/products`,
     })
       .then(responseData => {
-        // console.log('response', responseData);
-        setData(responseData.drinks);
+        console.log('responseListProducts', responseData);
+        setData(responseData);
       })
       .catch(error => {
         console.error(error);
@@ -90,7 +91,7 @@ const OrderScreen: React.FC = ({}) => {
           <Image
             style={styles.imageView}
             source={{
-              uri: item.strDrinkThumb,
+              uri: item.images,
             }}
           />
         </View>
@@ -103,14 +104,14 @@ const OrderScreen: React.FC = ({}) => {
             marginRight: 15,
           }}
         >
-          <Text style={{color: Colors.black, fontSize: 18, fontWeight: 'bold'}}>
-            {item.strIngredient2}
+          <Text style={{color: Colors.black, fontSize: 17, fontWeight: 'bold'}}>
+            {item.name}
           </Text>
-          <Text style={{color: Colors.black, fontSize: 16}}>
-            {`id: ${item.price}`}
+          <Text style={{color: Colors.black, fontSize: 15}}>
+            {`giá: ${item.price}`}
           </Text>
-          <Text style={{color: Colors.black, fontSize: 16}}>
-            {`so luong: ${item.quantity}`}
+          <Text style={{color: Colors.black, fontSize: 15}}>
+            {`số lượng: ${item.quantity}`}
           </Text>
           <TouchableOpacity
             onPress={() => {

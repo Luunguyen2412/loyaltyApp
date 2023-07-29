@@ -173,7 +173,7 @@ const PaymentScreen: React.FC = () => {
           <Image
             style={styles.imageView}
             source={{
-              uri: item.item.strDrinkThumb,
+              uri: item.item.images,
             }}
           />
         </View>
@@ -189,16 +189,16 @@ const PaymentScreen: React.FC = () => {
           <Text
             style={{
               color: Colors.black,
-              fontSize: 18,
+              fontSize: 17,
               fontWeight: 'bold',
             }}
           >
-            {item.item.strIngredient2}
+            {item.item.name}
           </Text>
           <Text
             style={{
               color: Colors.black,
-              fontSize: 16,
+              fontSize: 15,
             }}
           >
             {`id: ${item.item.price}`}
@@ -206,7 +206,7 @@ const PaymentScreen: React.FC = () => {
           <Text
             style={{
               color: Colors.black,
-              fontSize: 16,
+              fontSize: 15,
             }}
           >
             {`so luong: ${item.item.quantity}`}
