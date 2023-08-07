@@ -15,6 +15,7 @@ import UpdateCustomer from '../container/Customer/UpdateCustomer';
 import UpdateEmployee from '../container/Employee/UpdateEmployee';
 import ListProduct from '../container/Product';
 import AddProduct from '../container/Product/AddProduct';
+import BillDetailScreen from '../container/Order/BillDetail';
 
 const Stack = createNativeStackNavigator();
 
@@ -150,6 +151,17 @@ const AppNavigator: React.FC = () => {
         component={PaymentScreen}
         options={{
           title: 'Payment',
+          headerTintColor: Colors.white,
+          headerStyle: {
+            backgroundColor: Colors.PRIMARY,
+          },
+        }}
+      />
+      <Stack.Screen
+        name="BillDetail"
+        component={BillDetailScreen}
+        options={{
+          title: 'Bill Detail',
           headerTintColor: Colors.white,
           headerStyle: {
             backgroundColor: Colors.PRIMARY,

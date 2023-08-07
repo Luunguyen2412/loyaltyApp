@@ -76,6 +76,7 @@ const PaymentScreen: React.FC = () => {
   const route = useRoute();
 
   let dataPayment = route.params.dataPayment;
+  let cart = route.params.cart;
 
   const [search, setSearch] = useState('');
 
@@ -91,6 +92,7 @@ const PaymentScreen: React.FC = () => {
   const [discount, setDiscount] = useState(0);
   const [deliveryCharge, setDeliveryCharge] = useState(0);
   const [orderTotal, setOrderTotal] = useState(0);
+  const [isValidate, setIsValidate] = useState(false);
 
   useEffect(() => {}, []);
 
@@ -149,61 +151,6 @@ const PaymentScreen: React.FC = () => {
     );
   };
 
-  const renderItem = ({item, index}) => {
-    return (
-      <TouchableOpacity style={styles.itemProduct} onPress={() => {}}>
-        <View
-          style={{
-            flex: 3,
-            alignItems: 'center',
-          }}
-        >
-          <Image
-            style={styles.imageView}
-            source={{
-              uri: item.item.images,
-            }}
-          />
-        </View>
-        <View
-          style={{
-            flex: 7,
-            flexDirection: 'column',
-            marginBottom: 10,
-            marginLeft: 5,
-            marginRight: 15,
-          }}
-        >
-          <Text
-            style={{
-              color: Colors.black,
-              fontSize: 17,
-              fontWeight: 'bold',
-            }}
-          >
-            {item.item.name}
-          </Text>
-          <Text
-            style={{
-              color: Colors.black,
-              fontSize: 15,
-            }}
-          >
-            {`id: ${item.item.price}`}
-          </Text>
-          <Text
-            style={{
-              color: Colors.black,
-              fontSize: 15,
-            }}
-          >
-            {`so luong: ${item.item.quantity}`}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    );
-  };
-
   const bottomSheetRef = useRef(null);
 
   const openBottomSheet = () => {
@@ -217,6 +164,7 @@ const PaymentScreen: React.FC = () => {
   dataPayment.deliveryOption = selectedDeliveryOption;
   dataPayment.paymentMethod = selectedPayment;
   dataPayment.customerChoose = selectedCustomer;
+  dataPayment.listChoose = cart;
 
   console.log('dataPayment', dataPayment);
 
@@ -234,12 +182,69 @@ const PaymentScreen: React.FC = () => {
           paddingTop: 10,
         }}
       >
-        {dataPayment.listChoose.length === 0 ? (
-          <Text style={{fontSize: 16, fontWeight: '500'}}>
-            Vui long chon san pham
+        {cart.length === 0 ? (
+          <Text style={{fontSize: 16, fontWeight: '500', color: Colors.black}}>
+            Vui lòng chọn sản phẩm
           </Text>
         ) : (
-          <FlatList data={dataPayment.listChoose} renderItem={renderItem} />
+          cart.map((item, index) => {
+            return (
+              <TouchableOpacity
+                key={index}
+                style={styles.itemProduct}
+                onPress={() => {}}
+              >
+                <View
+                  style={{
+                    flex: 3,
+                    alignItems: 'center',
+                  }}
+                >
+                  <Image
+                    style={styles.imageView}
+                    source={{
+                      uri: item.images,
+                    }}
+                  />
+                </View>
+                <View
+                  style={{
+                    flex: 7,
+                    flexDirection: 'column',
+                    marginBottom: 10,
+                    marginLeft: 5,
+                    marginRight: 15,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: Colors.black,
+                      fontSize: 17,
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    {item.name}
+                  </Text>
+                  <Text
+                    style={{
+                      color: Colors.black,
+                      fontSize: 15,
+                    }}
+                  >
+                    {`giá: ${item.price}`}
+                  </Text>
+                  <Text
+                    style={{
+                      color: Colors.black,
+                      fontSize: 15,
+                    }}
+                  >
+                    {`số lượng: ${item.quantity}`}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            );
+          })
         )}
 
         {/*  Add customer */}
@@ -363,7 +368,10 @@ const PaymentScreen: React.FC = () => {
                 key={option.id}
                 label={option.label}
                 checked={selectedDeliveryOption === option.id}
-                onPress={() => handleSelectDeliveryPress(option.id)}
+                onPress={() => {
+                  handleSelectDeliveryPress(option.id);
+                  setIsValidate(false);
+                }}
               />
             ))}
           </View>
@@ -439,12 +447,38 @@ const PaymentScreen: React.FC = () => {
                 key={option.id}
                 label={option.label}
                 checked={selectedPayment === option.id}
-                onPress={() => handleSelectPayment(option.id)}
+                onPress={() => {
+                  handleSelectPayment(option.id);
+                  setIsValidate(false);
+                }}
               />
             ))}
           </View>
         </View>
-        <MyButton style={styles.buttonPayment} text="Thanh toán" />
+        {isValidate && (
+          <View style={{paddingVertical: 10, alignItems: 'center'}}>
+            <Text style={{color: 'red'}}>Vui lòng nhập đầy đủ thông tin</Text>
+          </View>
+        )}
+        <MyButton
+          onPress={() => {
+            if (
+              dataPayment.listChoose.length === 0 &&
+              dataPayment.customerChoose === null &&
+              dataPayment.deliveryOption === undefined &&
+              dataPayment.paymentMethod === undefined
+            ) {
+              setIsValidate(true);
+              return;
+            } else {
+              navigation.navigate('BillDetail', {
+                dataPayment: dataPayment,
+              });
+            }
+          }}
+          style={styles.buttonPayment}
+          text="Thanh toán"
+        />
 
         <View style={{height: 20}} />
       </ScrollView>

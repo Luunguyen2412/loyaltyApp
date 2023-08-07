@@ -90,7 +90,7 @@ const UpdateEmployee: React.FC = ({}) => {
       .then(responseData => {
         console.log('responseUpdateEmployee', responseData);
         dispatch(updateUserSuccess());
-        navigation.goBack();
+        navigation.navigate('ListEmployee');
       })
       .catch(error => {
         console.log('errorUpdateEmployee', error);

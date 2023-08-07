@@ -43,7 +43,7 @@ const UpdateCustomer: React.FC = ({}) => {
     })
       .then(async responseData => {
         console.log('responseUpdateCustomer', responseData);
-        navigation.goBack();
+        navigation.navigate('ListCustomer');
       })
       .catch(error => {
         console.log('errorUpdateCustomer', error);

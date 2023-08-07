@@ -42,11 +42,10 @@ const OrderScreen: React.FC = ({}) => {
 
   const [billPrice, setBillPrice] = useState(0);
 
-  const [cart, setCart] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
     fetchData();
-    dataPayment.listChoose = [];
     dataPayment.totalBill = billPrice;
   }, []);
 
@@ -82,8 +81,21 @@ const OrderScreen: React.FC = ({}) => {
   };
 
   const addItemToCart = item => {
-    const newItem = {item};
-    dataPayment.listChoose.push(newItem);
+    const itemIndex = cartItems.findIndex(
+      cartItem => cartItem._id === item._id,
+    );
+
+    // console.log('itemIndex', itemIndex);
+
+    if (itemIndex === -1) {
+      // If the item is not already in the cart, add it with quantity 1
+      setCartItems([...cartItems, {...item, quantity: 1}]);
+    } else {
+      // If the item is already in the cart, update its quantity
+      const updatedCartItems = [...cartItems];
+      updatedCartItems[itemIndex].quantity += 1;
+      setCartItems(updatedCartItems);
+    }
   };
 
   const increaseQuantity = index => {
@@ -195,7 +207,6 @@ const OrderScreen: React.FC = ({}) => {
           alignItems: 'center',
           justifyContent: 'space-between',
           height: 60,
-          // backgroundColor: Colors.grey,
           paddingHorizontal: 20,
           flexDirection: 'row',
         }}
@@ -211,10 +222,11 @@ const OrderScreen: React.FC = ({}) => {
         </Text>
         <TouchableOpacity
           onPress={() => {
-            dataPayment.totalBill = billPrice;
+            dataPayment.totalBill = billPrice; // set bill total order
 
             navigation.navigate('Payment', {
               dataPayment: dataPayment,
+              cart: cartItems,
             });
           }}
           style={{

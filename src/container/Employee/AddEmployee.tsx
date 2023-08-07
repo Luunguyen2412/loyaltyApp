@@ -63,7 +63,8 @@ const AddEmployee: React.FC = ({}) => {
     })
       .then(async responseData => {
         console.log('responseAddEmployee', responseData);
-        navigation.goBack();
+        navigation.navigate('ListEmployee');
+        // navigation.goBack();
       })
       .catch(error => {
         console.log('errorAddEmployee', error);

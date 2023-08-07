@@ -54,7 +54,7 @@ const AddProduct: React.FC = ({}) => {
     })
       .then(async responseData => {
         console.log('responseAddProduct', responseData);
-        navigation.goBack();
+        navigation.navigate('ListProduct');
       })
       .catch(error => {
         console.log('errorAddProduct', error);

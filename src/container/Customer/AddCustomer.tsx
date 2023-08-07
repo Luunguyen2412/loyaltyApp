@@ -29,7 +29,7 @@ const AddCustomer: React.FC = ({}) => {
       data: body,
       method: 'POST',
     });
-    navigation.goBack();
+    navigation.navigate('ListCustomer');
   };
 
   return (
