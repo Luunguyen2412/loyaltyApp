@@ -21,6 +21,17 @@ import MyTextInput from '../../components/MyTextInput';
 
 let width = Dimensions.get('window').width;
 
+const dataPayment = {
+  idPayment: 1,
+  staff: '',
+  totalBill: 0,
+  note: '',
+  deliveryOption: 0,
+  paymentMethod: 0,
+  customerChoose: {},
+  listChoose: [],
+};
+
 const OrderScreen: React.FC = ({}) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -35,11 +46,12 @@ const OrderScreen: React.FC = ({}) => {
 
   useEffect(() => {
     fetchData();
+    dataPayment.listChoose = [];
+    dataPayment.totalBill = billPrice;
   }, []);
 
   const fetchData = async () => {
     await fetchAPI({
-      // url: 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=',
       url: `${urlHost}/api/products`,
     })
       .then(responseData => {
@@ -63,17 +75,15 @@ const OrderScreen: React.FC = ({}) => {
       });
   };
 
-  const addItemToCart = item => {
-    // console.log('addddd', item);
-
-    const newItem = {item};
-    setCart([...cart, newItem]);
-  };
-
   const onChangePrice = price => {
     setQuantityProduct(quantityProduct + 1);
     setPriceProduct(priceProduct + price);
     setBillPrice(billPrice + price);
+  };
+
+  const addItemToCart = item => {
+    const newItem = {item};
+    dataPayment.listChoose.push(newItem);
   };
 
   const increaseQuantity = index => {
@@ -201,7 +211,11 @@ const OrderScreen: React.FC = ({}) => {
         </Text>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('Payment', {data: cart});
+            dataPayment.totalBill = billPrice;
+
+            navigation.navigate('Payment', {
+              dataPayment: dataPayment,
+            });
           }}
           style={{
             justifyContent: 'center',

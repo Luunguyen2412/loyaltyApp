@@ -13,6 +13,8 @@ import PaymentScreen from '../container/Order/Payment';
 import AddCustomer from '../container/Customer/AddCustomer';
 import UpdateCustomer from '../container/Customer/UpdateCustomer';
 import UpdateEmployee from '../container/Employee/UpdateEmployee';
+import ListProduct from '../container/Product';
+import AddProduct from '../container/Product/AddProduct';
 
 const Stack = createNativeStackNavigator();
 
@@ -148,6 +150,28 @@ const AppNavigator: React.FC = () => {
         component={PaymentScreen}
         options={{
           title: 'Payment',
+          headerTintColor: Colors.white,
+          headerStyle: {
+            backgroundColor: Colors.PRIMARY,
+          },
+        }}
+      />
+      <Stack.Screen
+        name="ListProduct"
+        component={ListProduct}
+        options={{
+          title: 'List Products',
+          headerTintColor: Colors.white,
+          headerStyle: {
+            backgroundColor: Colors.PRIMARY,
+          },
+        }}
+      />
+      <Stack.Screen
+        name="AddProduct"
+        component={AddProduct}
+        options={{
+          title: 'Add Product',
           headerTintColor: Colors.white,
           headerStyle: {
             backgroundColor: Colors.PRIMARY,

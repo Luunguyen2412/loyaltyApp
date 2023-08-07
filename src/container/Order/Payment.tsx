@@ -12,13 +12,13 @@ import {
 import MyTextInput from '../../components/MyTextInput';
 import Colors from '../../constants/Colors';
 import MyButton from '../../components/MyButton';
-import {BottomSheetModal, BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import MyBottomSheet from '../../components/MyBottomSheet';
 import {fetchAPI, urlHost} from '../../constants/ApiConstants';
+import RBSheet from 'react-native-raw-bottom-sheet';
 
 let width = Dimensions.get('window').width;
+let height = Dimensions.get('window').height;
 
 const PriceHeaderBar = ({lable, price}) => {
   return (
@@ -74,12 +74,14 @@ const RadioButton = ({label, checked, onPress, style}) => {
 const PaymentScreen: React.FC = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const data = route.params.data;
+
+  let dataPayment = route.params.dataPayment;
+
   const [search, setSearch] = useState('');
 
-  const [selectedDeliveryOption, setSelectedDeliveryOption] = useState(null);
+  const [selectedDeliveryOption, setSelectedDeliveryOption] = useState();
 
-  const [selectedPayment, setSelectedPayment] = useState(null);
+  const [selectedPayment, setSelectedPayment] = useState();
 
   const [listCustomers, setListCustomers] = useState([]);
 
@@ -87,9 +89,10 @@ const PaymentScreen: React.FC = () => {
 
   const [subTotal, setSubtotal] = useState(0);
   const [discount, setDiscount] = useState(0);
-
   const [deliveryCharge, setDeliveryCharge] = useState(0);
   const [orderTotal, setOrderTotal] = useState(0);
+
+  useEffect(() => {}, []);
 
   const handleSelectDeliveryPress = option => {
     setSelectedDeliveryOption(option);
@@ -109,22 +112,6 @@ const PaymentScreen: React.FC = () => {
     {id: 2, label: 'Momo'},
     {id: 3, label: 'Banking'},
   ];
-
-  //ref
-  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-
-  // variables
-  const snapPoints = useMemo(() => ['25%', '80%'], []);
-
-  // callbacks
-  const handlePresentModalPress = useCallback(() => {
-    bottomSheetModalRef.current?.present();
-  }, []);
-
-  // onChange
-  const handleSheetChanges = useCallback((index: number) => {
-    console.log('handleSheetChanges', index);
-  }, []);
 
   const getListCustomers = async () => {
     // dispatch(isFetching());
@@ -152,6 +139,7 @@ const PaymentScreen: React.FC = () => {
         style={{flexDirection: 'row', padding: 10}}
         onPress={() => {
           addCustomer(item);
+          closeBottomSheet();
         }}
       >
         <Text
@@ -216,6 +204,22 @@ const PaymentScreen: React.FC = () => {
     );
   };
 
+  const bottomSheetRef = useRef(null);
+
+  const openBottomSheet = () => {
+    bottomSheetRef.current.open();
+  };
+
+  const closeBottomSheet = () => {
+    bottomSheetRef.current.close();
+  };
+
+  dataPayment.deliveryOption = selectedDeliveryOption;
+  dataPayment.paymentMethod = selectedPayment;
+  dataPayment.customerChoose = selectedCustomer;
+
+  console.log('dataPayment', dataPayment);
+
   return (
     <View
       style={{
@@ -230,10 +234,17 @@ const PaymentScreen: React.FC = () => {
           paddingTop: 10,
         }}
       >
-        <FlatList data={data} renderItem={renderItem} />
+        {dataPayment.listChoose.length === 0 ? (
+          <Text style={{fontSize: 16, fontWeight: '500'}}>
+            Vui long chon san pham
+          </Text>
+        ) : (
+          <FlatList data={dataPayment.listChoose} renderItem={renderItem} />
+        )}
 
+        {/*  Add customer */}
         <View style={styles.card}>
-          {/* <View
+          <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
@@ -261,7 +272,7 @@ const PaymentScreen: React.FC = () => {
             >
               <FontAwesome5 name={'search'} size={16} color={Colors.white} />
             </TouchableOpacity>
-          </View> */}
+          </View>
           {selectedCustomer && (
             <View
               style={{
@@ -319,80 +330,12 @@ const PaymentScreen: React.FC = () => {
             text="Thêm khách hàng"
             onPress={() => {
               getListCustomers();
-              handlePresentModalPress();
+              openBottomSheet();
             }}
           />
-          <BottomSheetModal
-            ref={bottomSheetModalRef}
-            index={1}
-            snapPoints={snapPoints}
-            onChange={handleSheetChanges}
-          >
-            <View
-              style={{
-                flex: 1,
-                paddingHorizontal: 10,
-                // alignItems: 'center',
-                // backgroundColor: Colors.grey,
-              }}
-            >
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                }}
-              >
-                <MyTextInput
-                  style={{
-                    marginRight: 15,
-                    alignItems: 'center',
-                    borderWidth: 1,
-                    flexDirection: 'row',
-                    height: 50,
-                    width: width * 0.7,
-                    borderRadius: 10,
-                    borderColor: Colors.grey,
-                    marginBottom: 15,
-                    color: Colors.black,
-                  }}
-                  placeholder={'Tìm kiếm Khách hàng'}
-                  value={search}
-                  onChangeText={value => {
-                    // setSearch(value);
-                  }}
-                />
-                <TouchableOpacity
-                  onPress={() => {
-                    // searchItem(search);
-                  }}
-                  style={{
-                    justifyContent: 'center',
-                    paddingHorizontal: 15,
-                    height: 50,
-                    backgroundColor: Colors.PRIMARY,
-                    borderRadius: 10,
-                  }}
-                >
-                  <FontAwesome5
-                    name={'search'}
-                    size={16}
-                    color={Colors.white}
-                  />
-                </TouchableOpacity>
-              </View>
-              <FlatList data={listCustomers} renderItem={renderSearchItem} />
-            </View>
-          </BottomSheetModal>
-          {/* <MyBottomSheet
-            ref={bottomSheetModalRef}
-            index={1}
-            snapPoints={snapPoints}
-            onChange={handleSheetChanges}
-            data={listCustomers}
-            renderItem={renderSearchItem}
-          /> */}
         </View>
 
+        {/*  Delivery Option */}
         <View style={styles.card}>
           <Text
             style={{
@@ -426,6 +369,7 @@ const PaymentScreen: React.FC = () => {
           </View>
         </View>
 
+        {/* Order Summary */}
         <View style={styles.card}>
           <Text
             style={{
@@ -464,11 +408,12 @@ const PaymentScreen: React.FC = () => {
                 fontSize: 16,
               }}
             >
-              100.000
+              {dataPayment.totalBill}
             </Text>
           </View>
         </View>
 
+        {/* Payment Method */}
         <View style={styles.card}>
           <Text
             style={{
@@ -503,6 +448,62 @@ const PaymentScreen: React.FC = () => {
 
         <View style={{height: 20}} />
       </ScrollView>
+
+      <RBSheet
+        ref={bottomSheetRef}
+        height={height * 0.5} // Set the desired height of the bottom sheet
+        duration={250} // Animation duration
+      >
+        <View
+          style={{
+            flex: 1,
+            paddingHorizontal: 10,
+            paddingVertical: 15,
+          }}
+        >
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+            }}
+          >
+            <MyTextInput
+              style={{
+                marginRight: 15,
+                alignItems: 'center',
+                borderWidth: 1,
+                flexDirection: 'row',
+                height: 50,
+                width: width * 0.7,
+                borderRadius: 10,
+                borderColor: Colors.grey,
+                marginBottom: 15,
+                color: Colors.black,
+              }}
+              placeholder={'Tìm kiếm Khách hàng'}
+              value={search}
+              onChangeText={value => {
+                // setSearch(value);
+              }}
+            />
+            <TouchableOpacity
+              onPress={() => {
+                // searchItem(search);
+              }}
+              style={{
+                justifyContent: 'center',
+                paddingHorizontal: 15,
+                height: 50,
+                backgroundColor: Colors.PRIMARY,
+                borderRadius: 10,
+              }}
+            >
+              <FontAwesome5 name={'search'} size={16} color={Colors.white} />
+            </TouchableOpacity>
+          </View>
+          <FlatList data={listCustomers} renderItem={renderSearchItem} />
+        </View>
+      </RBSheet>
     </View>
   );
 };

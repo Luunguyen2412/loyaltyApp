@@ -43,9 +43,9 @@ const listModule = [
   },
   {
     id: 4,
-    name: 'File\nManagement',
-    navigate: '',
-    icon: 'file',
+    name: 'Product\nManagement',
+    navigate: 'ListProduct',
+    icon: 'store',
     permission: 2,
   },
 ];

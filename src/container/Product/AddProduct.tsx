@@ -17,56 +17,47 @@ import ImagePicker from 'react-native-image-crop-picker';
 
 let width = Dimensions.get('window').width;
 
-const AddEmployee: React.FC = ({}) => {
+const AddProduct: React.FC = ({}) => {
   const navigation = useNavigation();
 
-  const [avatar, setAvatar] = useState('');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [images, setImages] = useState('');
+
+  const [productName, setProductName] = useState('');
+  const [productDetail, setProductDetail] = useState('');
   const [isValidate, setIsValidate] = useState(false);
   const [msgError, setMsgError] = useState('');
-  const [position, setPosition] = useState(); // 1 - Admin, 2 - Staff
+  const [category, setCategory] = useState(); // 1 - Milktea, 2 - Cafe
 
-  const [phone, setPhone] = useState('');
-  const [address, setAddress] = useState('');
-  const [gender, setGender] = useState(); // 1 - Male, 2 - Female;
+  const [productPrice, setProductPrice] = useState(0);
+  const [quantity, setQuantity] = useState(1);
+  const [isOpenDropDown, setIsOpenDropDown] = useState(false);
 
-  const [isOpenDropDownPosition, setIsOpenDropDownPosition] = useState(false);
-
-  const [isOpenDropDownGender, setIsOpenDropDownGender] = useState(false);
-
-  const _AddEmployee = async (
-    userName,
-    phoneNumber,
-    pass,
-    posiTion,
-    addRess,
-    genDer,
-  ) => {
-    if (phoneNumber === '' || pass === '' || userName === '') {
+  const _AddProduct = async (name, detail, cateGory, price, quanTity) => {
+    if (name === '' || price === '') {
       setIsValidate(true);
     }
 
     const body = {
-      username: userName,
-      phone: phoneNumber,
-      password: pass,
-      position: posiTion,
-      address: addRess,
-      gender: genDer,
+      name: name,
+      images:
+        'https://product.hstatic.net/1000075078/product/1639377904_bac-siu_d2f15fb7fa024b528c6e9259f6637c9e.jpg',
+      category: cateGory,
+      detail: detail,
+      price: price,
+      quantity: quanTity,
     };
 
     await fetchAPI({
-      url: `${urlHost}/api/users/register`,
+      url: `${urlHost}/api/products`,
       data: body,
       method: 'POST',
     })
       .then(async responseData => {
-        console.log('responseAddEmployee', responseData);
+        console.log('responseAddProduct', responseData);
         navigation.goBack();
       })
       .catch(error => {
-        console.log('errorAddEmployee', error);
+        console.log('errorAddProduct', error);
       });
   };
 
@@ -77,7 +68,7 @@ const AddEmployee: React.FC = ({}) => {
       cropping: true,
     }).then(image => {
       console.log('imageeee', image);
-      setAvatar(image.path);
+      setImages(image.path);
     });
   };
 
@@ -91,14 +82,14 @@ const AddEmployee: React.FC = ({}) => {
       >
         <View
           style={{
-            paddingVertical: 15,
+            paddingBottom: 15,
             flexDirection: 'row',
             alignItems: 'center',
           }}
         >
           <Image
             style={styles.avatarContainer}
-            source={{uri: avatar}}
+            source={{uri: images}}
             resizeMode="contain"
           />
           <TouchableOpacity
@@ -112,77 +103,48 @@ const AddEmployee: React.FC = ({}) => {
             </Text>
           </TouchableOpacity>
         </View>
-        <MyDropdown
-          isOpen={isOpenDropDownPosition}
-          onPress={() => {
-            setIsOpenDropDownPosition(!isOpenDropDownPosition);
-          }}
-          placeholder="Chọn vị trí của bạn"
-          itemDrops={[
-            {label: 'Admin', value: 1},
-            {label: 'Nhân viên', value: 2},
-          ]}
-          showTickIcon
-          onSelectItemValues={values => {
-            setIsOpenDropDownPosition(!isOpenDropDownPosition);
-            setPosition(values);
-          }}
-          value={position}
-        />
-
         <MyTextInput
-          placeholder="Nhập họ tên của bạn"
-          value={username}
+          placeholder="Nhập tên sản phảm"
+          value={productName}
           onChangeText={value => {
-            setUsername(value);
+            setProductName(value);
             setIsValidate(false);
           }}
         />
         <MyTextInput
-          placeholder="Nhập số điện thoại của bạn"
-          value={phone}
-          keyboardType="number-pad"
+          placeholder="Nhập chi tiết sản phảm"
+          value={productName}
           onChangeText={value => {
-            setPhone(value);
+            setProductDetail(value);
             setIsValidate(false);
           }}
         />
-
         <MyTextInput
-          placeholder="Nhập mật khẩu của bạn"
-          value={password}
+          placeholder="Nhập giá sản phảm"
+          value={productName}
           onChangeText={value => {
-            setPassword(value);
+            setProductPrice(value);
             setIsValidate(false);
           }}
         />
 
         <MyDropdown
-          isOpen={isOpenDropDownGender}
+          isOpen={isOpenDropDown}
           onPress={() => {
-            setIsOpenDropDownGender(!isOpenDropDownGender);
+            setIsOpenDropDown(!isOpenDropDown);
           }}
-          placeholder="Chọn giới tính của bạn"
+          placeholder="Chọn loại sản phẩm"
           itemDrops={[
-            {label: 'Nam', value: 1},
-            {label: 'Nữ', value: 2},
+            {label: 'Milktea', value: 1},
+            {label: 'Cafe', value: 2},
           ]}
           showTickIcon
           onSelectItemValues={values => {
-            setIsOpenDropDownGender(!isOpenDropDownGender);
-            setGender(values);
+            setIsOpenDropDown(!isOpenDropDown);
+            setCategory(values);
           }}
-          value={gender}
+          value={category}
         />
-        <MyTextInput
-          placeholder="Nhập địa chỉ của bạn"
-          value={address}
-          onChangeText={value => {
-            setAddress(value);
-            setIsValidate(false);
-          }}
-        />
-
         {isValidate ? (
           <View
             style={{
@@ -206,9 +168,15 @@ const AddEmployee: React.FC = ({}) => {
         <MyButton
           style={styles.button}
           text="Lưu"
-          onPress={() =>
-            _AddEmployee(username, phone, password, position, address)
-          }
+          onPress={() => {
+            _AddProduct(
+              productName,
+              productDetail,
+              category,
+              productPrice,
+              quantity,
+            );
+          }}
         />
       </View>
     </View>
@@ -228,9 +196,9 @@ const styles = StyleSheet.create({
   },
   avatarContainer: {
     backgroundColor: 'gray',
-    height: 100,
-    width: 100,
-    borderRadius: 50,
+    height: 150,
+    width: 150,
+    borderRadius: 10,
     borderWidth: 1,
   },
   container: {
@@ -251,4 +219,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddEmployee;
+export default AddProduct;
