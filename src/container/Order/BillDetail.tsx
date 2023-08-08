@@ -40,8 +40,6 @@ const BillDetailScreen: React.FC = ({}) => {
 
   let dataPayment = route.params.dataPayment;
 
-  console.log('rrrrrr', dataPayment);
-
   return (
     <View
       style={{
@@ -55,7 +53,7 @@ const BillDetailScreen: React.FC = ({}) => {
         Thanh toán thành công
       </Text>
       <View style={styles.card}>
-        <Text style={{fontSize: 16, color: Colors.black, fontWeight: '500'}}>
+        <Text style={{fontSize: 18, color: Colors.black, fontWeight: '500'}}>
           Thông tin hoá đơn
         </Text>
         {dataPayment.listChoose.length > 0 ? (

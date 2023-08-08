@@ -18,6 +18,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../store';
 import {fetchAPI} from '../../constants/ApiConstants';
 import MyTextInput from '../../components/MyTextInput';
+import {getListSuccess, isFetching} from './reducer';
 
 let width = Dimensions.get('window').width;
 
@@ -43,6 +44,7 @@ const OrderScreen: React.FC = ({}) => {
   const [billPrice, setBillPrice] = useState(0);
 
   const [cartItems, setCartItems] = useState([]);
+  const {isLoading} = useSelector((state: RootState) => state.order);
 
   useEffect(() => {
     fetchData();
@@ -50,11 +52,13 @@ const OrderScreen: React.FC = ({}) => {
   }, []);
 
   const fetchData = async () => {
+    dispatch(isFetching());
     await fetchAPI({
       url: `${urlHost}/api/products`,
     })
       .then(responseData => {
         console.log('responseListProducts', responseData);
+        dispatch(getListSuccess());
         setData(responseData);
       })
       .catch(error => {
@@ -199,7 +203,19 @@ const OrderScreen: React.FC = ({}) => {
             <FontAwesome5 name={'search'} size={16} color={Colors.white} />
           </TouchableOpacity>
         </View>
-        <FlatList data={data} renderItem={renderItem} />
+        {isLoading ? (
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <ActivityIndicator size="large" color={Colors.PRIMARY} />
+          </View>
+        ) : (
+          <FlatList data={data} renderItem={renderItem} />
+        )}
       </View>
 
       <View
