@@ -15,7 +15,7 @@ import {logOut} from '../Login/reducer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {fetchAPI, urlHost} from '../../constants/ApiConstants';
 import {RootState} from '../../store';
-import {getProfile, isFetching} from './reducer';
+import {getProfile, getProfileFail, isFetching} from './reducer';
 import {USER_ID} from '../../common/storage';
 
 let width = Dimensions.get('window').width;
@@ -25,9 +25,9 @@ const ProfileScreen: React.FC = () => {
 
   const [data, setData] = useState();
 
-  const [position, setPosition] = useState(); // 1 - Admin, 2 - Staff
+  const [position, setPosition] = useState(''); // 1 - Admin, 2 - Staff
 
-  const [gender, setGender] = useState(); // 1 - Male, 2 - Female;
+  const [gender, setGender] = useState(''); // 1 - Male, 2 - Female;
 
   const {isLoading} = useSelector((state: RootState) => state.profile);
   const {dataUser} = useSelector((state: RootState) => state.auth);
@@ -72,6 +72,7 @@ const ProfileScreen: React.FC = () => {
       })
       .catch(error => {
         console.log('errorProfileInfomation', error);
+        dispatch(getProfileFail());
       });
   };
 
@@ -121,7 +122,19 @@ const ProfileScreen: React.FC = () => {
               </View>
             </>
           ) : (
-            <Text>Khong co du lieu</Text>
+            <View
+              style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}
+            >
+              <Text
+                style={{
+                  fontSize: 15,
+                  color: Colors.black,
+                  marginTop: 5,
+                }}
+              >
+                Không lấy được dữ liệu
+              </Text>
+            </View>
           )}
           <View style={{marginTop: 50}}>
             <MyButton onPress={onLogOut} style={styles.button} text="Log out" />

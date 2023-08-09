@@ -21,10 +21,14 @@ export const ProfileSlice = createSlice({
       state.isLoading = false;
       state.dataUser = action.payload;
     },
+    getProfileFail: state => {
+      state.isLoading = false;
+      state.dataUser = {};
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const {isFetching, getProfile} = ProfileSlice.actions;
+export const {isFetching, getProfile, getProfileFail} = ProfileSlice.actions;
 
 export default ProfileSlice.reducer;

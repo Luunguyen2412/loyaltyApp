@@ -16,6 +16,7 @@ import MyDropdown from '../../components/MyDropdown';
 import {useDispatch} from 'react-redux';
 import {isFetching, updateUserSuccess} from './reducer';
 import ImagePicker from 'react-native-image-crop-picker';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 let width = Dimensions.get('window').width;
 
@@ -109,75 +110,88 @@ const UpdateEmployee: React.FC = ({}) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View
-        style={{
-          flex: 8,
-          paddingTop: 20,
-        }}
-      >
+    <KeyboardAwareScrollView
+      keyboardShouldPersistTaps="always"
+      keyboardDismissMode="on-drag"
+      bounces={false}
+      overScrollMode="always"
+      showsHorizontalScrollIndicator={false}
+      showsVerticalScrollIndicator={false}
+      enableOnAndroid
+      enableAutomaticScroll
+      contentContainerStyle={{
+        flexGrow: 1,
+      }}
+    >
+      <View style={styles.container}>
         <View
           style={{
-            paddingVertical: 15,
-            flexDirection: 'row',
-            alignItems: 'center',
+            flex: 8,
+            paddingTop: 20,
           }}
         >
-          <Image
-            style={styles.avatarContainer}
-            source={{uri: avatar}}
-            resizeMode="contain"
-          />
-          <TouchableOpacity
-            style={styles.buttonPickImg}
-            onPress={() => handlePickImage()}
+          <View
+            style={{
+              paddingVertical: 15,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}
           >
-            <Text
-              style={{fontSize: 14, color: Colors.white, fontWeight: '500'}}
+            <Image
+              style={styles.avatarContainer}
+              source={{uri: avatar}}
+              resizeMode="contain"
+            />
+            <TouchableOpacity
+              style={styles.buttonPickImg}
+              onPress={() => handlePickImage()}
             >
-              Chọn ảnh từ thư viện
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <MyDropdown
-          isOpen={isOpenDropDownPosition}
-          onPress={() => {
-            setIsOpenDropDownPosition(!isOpenDropDownPosition);
-          }}
-          placeholder="Chọn vị trí của bạn"
-          itemDrops={[
-            {label: 'Admin', value: 1},
-            {label: 'Staff', value: 2},
-          ]}
-          showTickIcon
-          onSelectItemValues={values => {
-            setIsOpenDropDownPosition(!isOpenDropDownPosition);
-            setPosition(values);
-          }}
-          value={position}
-        />
+              <Text
+                style={{fontSize: 14, color: Colors.white, fontWeight: '500'}}
+              >
+                Chọn ảnh từ thư viện
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <MyDropdown
+            isOpen={isOpenDropDownPosition}
+            onPress={() => {
+              setIsOpenDropDownPosition(!isOpenDropDownPosition);
+            }}
+            placeholder="Chọn vị trí của bạn"
+            itemDrops={[
+              {label: 'Admin', value: 1},
+              {label: 'Staff', value: 2},
+            ]}
+            showTickIcon
+            onSelectItemValues={values => {
+              setIsOpenDropDownPosition(!isOpenDropDownPosition);
+              setPosition(values);
+            }}
+            value={position}
+          />
 
-        <MyTextInput
-          style={styles.textInput}
-          placeholder="Nhập họ tên của bạn"
-          value={username}
-          onChangeText={value => {
-            setUsername(value);
-            setIsValidate(false);
-          }}
-        />
-        <MyTextInput
-          style={styles.textInput}
-          placeholder="Nhập số điện thoại của bạn"
-          value={phone}
-          keyboardType="number-pad"
-          onChangeText={value => {
-            setPhone(value);
-            setIsValidate(false);
-          }}
-        />
+          <MyTextInput
+            style={styles.textInput}
+            placeholder="Nhập họ tên của bạn"
+            value={username}
+            onChangeText={value => {
+              setUsername(value);
+              setIsValidate(false);
+            }}
+          />
+          <MyTextInput
+            style={styles.textInput}
+            placeholder="Nhập số điện thoại của bạn"
+            value={phone}
+            keyboardType="number-pad"
+            onChangeText={value => {
+              setPhone(value);
+              setIsValidate(false);
+            }}
+          />
 
-        {/* <MyTextInput
+          {/* <MyTextInput
           placeholder="Nhập mật khẩu của bạn"
           value={password}
           onChangeText={value => {
@@ -186,70 +200,71 @@ const UpdateEmployee: React.FC = ({}) => {
           }}
         /> */}
 
-        <MyDropdown
-          isOpen={isOpenDropDownGender}
-          onPress={() => {
-            setIsOpenDropDownGender(!isOpenDropDownGender);
-          }}
-          placeholder="Chọn giới tính của bạn"
-          itemDrops={[
-            {label: 'Nam', value: 1},
-            {label: 'Nữ', value: 2},
-          ]}
-          showTickIcon
-          onSelectItemValues={values => {
-            setIsOpenDropDownGender(!isOpenDropDownGender);
-            setGender(values);
-          }}
-          value={gender}
-        />
-        <MyTextInput
-          style={styles.textInput}
-          placeholder="Nhập địa chỉ của bạn"
-          value={address}
-          onChangeText={value => {
-            setAddress(value);
-            setIsValidate(false);
-          }}
-        />
-
-        {isValidate ? (
-          <View
-            style={{
-              height: 50,
-              alignItems: 'center',
+          <MyDropdown
+            isOpen={isOpenDropDownGender}
+            onPress={() => {
+              setIsOpenDropDownGender(!isOpenDropDownGender);
             }}
-          >
-            <Text style={{color: 'red'}}>Vui lòng điền thông tin đầy đủ</Text>
-          </View>
-        ) : (
-          <View style={{height: 50}} />
-        )}
+            placeholder="Chọn giới tính của bạn"
+            itemDrops={[
+              {label: 'Nam', value: 1},
+              {label: 'Nữ', value: 2},
+            ]}
+            showTickIcon
+            onSelectItemValues={values => {
+              setIsOpenDropDownGender(!isOpenDropDownGender);
+              setGender(values);
+            }}
+            value={gender}
+          />
+          <MyTextInput
+            style={styles.textInput}
+            placeholder="Nhập địa chỉ của bạn"
+            value={address}
+            onChangeText={value => {
+              setAddress(value);
+              setIsValidate(false);
+            }}
+          />
+
+          {isValidate ? (
+            <View
+              style={{
+                height: 50,
+                alignItems: 'center',
+              }}
+            >
+              <Text style={{color: 'red'}}>Vui lòng điền thông tin đầy đủ</Text>
+            </View>
+          ) : (
+            <View style={{height: 50}} />
+          )}
+        </View>
+        <View
+          style={{
+            flex: 2,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <MyButton
+            style={styles.button}
+            text="Lưu"
+            onPress={() =>
+              _updateEmployee(
+                avatar,
+                username,
+                phone,
+                password,
+                position,
+                address,
+                gender,
+              )
+            }
+          />
+        </View>
       </View>
-      <View
-        style={{
-          flex: 2,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <MyButton
-          style={styles.button}
-          text="Lưu"
-          onPress={() =>
-            _updateEmployee(
-              avatar,
-              username,
-              phone,
-              password,
-              position,
-              address,
-              gender,
-            )
-          }
-        />
-      </View>
-    </View>
+    </KeyboardAwareScrollView>
   );
 };
 

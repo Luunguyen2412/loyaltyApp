@@ -151,6 +151,25 @@ const PaymentScreen: React.FC = () => {
     );
   };
 
+  const handlePaymentCart = async data => {
+    const body = {
+      data,
+    };
+    // console.log('bodyyyy', JSON.stringify(body.data));
+
+    await fetchAPI({
+      url: `${urlHost}/api/bills`,
+      data: body.data,
+      method: 'POST',
+    })
+      .then(async responseData => {
+        console.log('responsePaymentCart', responseData);
+      })
+      .catch(error => {
+        console.log('errorPaymentCart', error);
+      });
+  };
+
   const bottomSheetRef = useRef(null);
 
   const openBottomSheet = () => {
@@ -471,6 +490,7 @@ const PaymentScreen: React.FC = () => {
               setIsValidate(true);
               return;
             } else {
+              handlePaymentCart(dataPayment);
               navigation.navigate('BillDetail', {
                 dataPayment: dataPayment,
               });

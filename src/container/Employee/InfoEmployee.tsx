@@ -40,11 +40,14 @@ const InfoEmployee: React.FC = ({}) => {
 
   const [shouldReloadData, setShouldReloadData] = useState(false);
 
+  const [userId, setUserId] = useState('');
+
   useEffect(() => {
     const userId = route.params.data._id;
 
     if (userId) {
       getInfomation(userId);
+      setUserId(userId);
     }
   }, []);
 
@@ -75,6 +78,20 @@ const InfoEmployee: React.FC = ({}) => {
       })
       .catch(error => {
         console.log('errorUserInfomation', error);
+      });
+  };
+
+  const RemoveUser = async idUser => {
+    await fetchAPI({
+      url: `${urlHost}/api/users/${idUser}`,
+      method: 'DELETE',
+    })
+      .then(responseData => {
+        console.log('responseRemoveUser', responseData);
+        navigation.navigate('ListEmployee');
+      })
+      .catch(error => {
+        console.error('errorrr: ', error);
       });
   };
 
@@ -163,7 +180,9 @@ const InfoEmployee: React.FC = ({}) => {
                       [
                         {
                           text: 'Đồng ý',
-                          onPress: () => {},
+                          onPress: () => {
+                            RemoveUser(userId);
+                          },
                         },
                         {
                           text: 'Không',

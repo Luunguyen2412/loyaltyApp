@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   StyleSheet,
   Dimensions,
+  ScrollView,
 } from 'react-native';
 import Colors from '../../constants/Colors';
 import {urlHost} from '../../constants/ApiConstants';
@@ -38,125 +39,151 @@ const BillDetailScreen: React.FC = ({}) => {
   const dispatch = useDispatch();
   const route = useRoute();
 
+  const [paymentMethod, setPaymentMethod] = useState('');
+
   let dataPayment = route.params.dataPayment;
 
+  const paymentMethods = [
+    {id: 1, label: 'Cash'},
+    {id: 2, label: 'Momo'},
+    {id: 3, label: 'Banking'},
+  ];
+
+  useEffect(() => {
+    if (dataPayment.paymentMethod === 1) {
+      setPaymentMethod('Cash');
+    } else if (dataPayment.paymentMethod === 2) {
+      setPaymentMethod('Momo');
+    } else if (dataPayment.paymentMethod === 3) {
+      setPaymentMethod('Banking');
+    }
+  }, []);
+
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: Colors.white,
-        paddingHorizontal: 15,
-        paddingVertical: 20,
-      }}
-    >
-      <Text style={{fontSize: 20, color: Colors.black, fontWeight: '500'}}>
-        Thanh toán thành công
-      </Text>
-      <View style={styles.card}>
-        <Text style={{fontSize: 18, color: Colors.black, fontWeight: '500'}}>
-          Thông tin hoá đơn
+    <View style={styles.container}>
+      <ScrollView style={{flex: 1}}>
+        <Text style={{fontSize: 20, color: Colors.black, fontWeight: '500'}}>
+          Thanh toán thành công
         </Text>
-        {dataPayment.listChoose.length > 0 ? (
-          dataPayment.listChoose.map((item, index) => {
-            return (
-              <TouchableOpacity
-                key={index}
-                style={styles.itemProduct}
-                onPress={() => {}}
-              >
-                <View
-                  style={{
-                    flex: 3,
-                    alignItems: 'center',
-                  }}
-                >
-                  <Image
-                    style={styles.imageView}
-                    source={{
-                      uri: item.images,
-                    }}
-                  />
-                </View>
-                <View
-                  style={{
-                    flex: 7,
-                    flexDirection: 'column',
-                    marginBottom: 10,
-                    marginLeft: 5,
-                    marginRight: 15,
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: Colors.black,
-                      fontSize: 15,
-                      fontWeight: 'bold',
-                    }}
-                  >
-                    {item.name}
-                  </Text>
-
-                  <Text
-                    style={{
-                      color: Colors.black,
-                      fontSize: 13,
-                    }}
-                  >
-                    {`số lượng: ${item.quantity}`}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            );
-          })
-        ) : (
-          <Text style={{fontSize: 15, color: Colors.black, fontWeight: '500'}}>
-            Không có sản phẩm nào
+        <View style={styles.card}>
+          <Text style={{fontSize: 18, color: Colors.black, fontWeight: '500'}}>
+            Thông tin hoá đơn
           </Text>
-        )}
+          {dataPayment.listChoose.length > 0 ? (
+            dataPayment.listChoose.map((item, index) => {
+              return (
+                <TouchableOpacity
+                  key={index}
+                  style={styles.itemProduct}
+                  onPress={() => {}}
+                >
+                  <View
+                    style={{
+                      flex: 3,
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Image
+                      style={styles.imageView}
+                      source={{
+                        uri: item.images,
+                      }}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      flex: 7,
+                      flexDirection: 'column',
+                      marginBottom: 10,
+                      marginLeft: 5,
+                      marginRight: 15,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: Colors.black,
+                        fontSize: 15,
+                        fontWeight: 'bold',
+                      }}
+                    >
+                      {item.name}
+                    </Text>
 
-        <Text
-          style={{
-            fontSize: 15,
-            color: Colors.black,
-            fontWeight: '500',
-            marginTop: 10,
-          }}
-        >
-          {`Khách hàng: ${dataPayment.customerChoose.name} - ${dataPayment.customerChoose.phone}`}
-        </Text>
-        <Text style={{fontSize: 15, color: Colors.black, fontWeight: '500'}}>
-          {/* {`Vận chuyển: ${dataPayment.deliveryOption} `} */}
-          {`Vận chuyển: ${
-            dataPayment.deliveryOption === 1 ? 'Take away' : 'Delivery'
-          }`}
-        </Text>
-        <Text style={{fontSize: 15, color: Colors.black, fontWeight: '500'}}>
-          {`Thanh toán: ${dataPayment.paymentMethod} `}
-        </Text>
-        <Text
-          style={{
-            fontSize: 16,
-            color: Colors.black,
-            fontWeight: 'bold',
-            marginTop: 10,
-          }}
-        >
-          {`Tổng tiền: ${dataPayment.totalBill} `}
-        </Text>
-      </View>
+                    <Text
+                      style={{
+                        color: Colors.black,
+                        fontSize: 13,
+                      }}
+                    >
+                      {`số lượng: ${item.quantity}`}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              );
+            })
+          ) : (
+            <Text
+              style={{fontSize: 15, color: Colors.black, fontWeight: '500'}}
+            >
+              Không có sản phẩm nào
+            </Text>
+          )}
+          {dataPayment.customerChoose ? (
+            <Text style={styles.textStyle}>
+              {`Khách hàng: ${dataPayment.customerChoose.name} - ${dataPayment.customerChoose.phone}`}
+            </Text>
+          ) : (
+            <Text style={styles.textStyle}>
+              {'Khách hàng chưa đăng ký App'}
+            </Text>
+          )}
 
-      <MyButton
-        onPress={() => {
-          navigation.navigate('HomeScreen');
-        }}
-        style={styles.buttonPayment}
-        text="Quay về trang chủ"
-      />
+          <Text style={styles.textStyle}>
+            {`Vận chuyển: ${
+              dataPayment.deliveryOption === 1 ? 'Take away' : 'Delivery'
+            }`}
+          </Text>
+          <Text
+            style={styles.textStyle}
+          >{`Thanh toán: ${paymentMethod} `}</Text>
+          <Text
+            style={{
+              fontSize: 16,
+              color: Colors.black,
+              fontWeight: 'bold',
+              marginTop: 10,
+            }}
+          >
+            {`Tổng tiền: ${dataPayment.totalBill} `}
+          </Text>
+        </View>
+
+        <MyButton
+          onPress={() => {
+            navigation.navigate('HomeScreen');
+          }}
+          style={styles.buttonPayment}
+          text="Quay về trang chủ"
+        />
+      </ScrollView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.white,
+    paddingHorizontal: 15,
+    paddingTop: 20,
+    paddingBottom: 10,
+  },
+  textStyle: {
+    fontSize: 15,
+    color: Colors.black,
+    fontWeight: '500',
+    marginTop: 5,
+  },
   card: {
     marginVertical: 10,
     padding: 10,

@@ -94,7 +94,7 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.xposloyaltyapp"
+    namespace "com.loyaltyapp"
     defaultConfig {
         applicationId "com.xposloyaltyapp"
         minSdkVersion rootProject.ext.minSdkVersion

@@ -14,6 +14,7 @@ import {fetchAPI, urlHost} from '../../constants/ApiConstants';
 import {useNavigation} from '@react-navigation/native';
 import MyDropdown from '../../components/MyDropdown';
 import ImagePicker from 'react-native-image-crop-picker';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 let width = Dimensions.get('window').width;
 
@@ -73,113 +74,127 @@ const AddProduct: React.FC = ({}) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View
-        style={{
-          flex: 8,
-          paddingTop: 20,
-        }}
-      >
+    <KeyboardAwareScrollView
+      keyboardShouldPersistTaps="always"
+      keyboardDismissMode="on-drag"
+      bounces={false}
+      overScrollMode="always"
+      showsHorizontalScrollIndicator={false}
+      showsVerticalScrollIndicator={false}
+      enableOnAndroid
+      enableAutomaticScroll
+      contentContainerStyle={{
+        flexGrow: 1,
+      }}
+    >
+      <View style={styles.container}>
         <View
           style={{
-            paddingBottom: 15,
-            flexDirection: 'row',
-            alignItems: 'center',
+            flex: 8,
+            paddingTop: 20,
           }}
         >
-          <Image
-            style={styles.avatarContainer}
-            source={{uri: images}}
-            resizeMode="contain"
-          />
-          <TouchableOpacity
-            style={styles.buttonPickImg}
-            onPress={() => handlePickImage()}
-          >
-            <Text
-              style={{fontSize: 14, color: Colors.white, fontWeight: '500'}}
-            >
-              Chọn ảnh từ thư viện
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <MyTextInput
-          placeholder="Nhập tên sản phảm"
-          value={productName}
-          onChangeText={value => {
-            setProductName(value);
-            setIsValidate(false);
-          }}
-        />
-        <MyTextInput
-          placeholder="Nhập chi tiết sản phảm"
-          value={productName}
-          onChangeText={value => {
-            setProductDetail(value);
-            setIsValidate(false);
-          }}
-        />
-        <MyTextInput
-          placeholder="Nhập giá sản phảm"
-          value={productName}
-          onChangeText={value => {
-            setProductPrice(value);
-            setIsValidate(false);
-          }}
-        />
-
-        <MyDropdown
-          isOpen={isOpenDropDown}
-          onPress={() => {
-            setIsOpenDropDown(!isOpenDropDown);
-          }}
-          placeholder="Chọn loại sản phẩm"
-          itemDrops={[
-            {label: 'Milktea', value: 1},
-            {label: 'Cafe', value: 2},
-          ]}
-          showTickIcon
-          onSelectItemValues={values => {
-            setIsOpenDropDown(!isOpenDropDown);
-            setCategory(values);
-          }}
-          value={category}
-        />
-        {isValidate ? (
           <View
             style={{
-              height: 50,
+              paddingBottom: 15,
+              flexDirection: 'row',
               alignItems: 'center',
             }}
           >
-            <Text style={{color: 'red'}}>Vui lòng điền thông tin đầy đủ</Text>
+            <Image
+              style={styles.avatarContainer}
+              source={{uri: images}}
+              resizeMode="contain"
+            />
+            <TouchableOpacity
+              style={styles.buttonPickImg}
+              onPress={() => handlePickImage()}
+            >
+              <Text
+                style={{fontSize: 14, color: Colors.white, fontWeight: '500'}}
+              >
+                Chọn ảnh từ thư viện
+              </Text>
+            </TouchableOpacity>
           </View>
-        ) : (
-          <View style={{height: 50}} />
-        )}
-      </View>
-      <View
-        style={{
-          flex: 2,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <MyButton
-          style={styles.button}
-          text="Lưu"
-          onPress={() => {
-            _AddProduct(
-              productName,
-              productDetail,
-              category,
-              productPrice,
-              quantity,
-            );
+          <MyTextInput
+            placeholder="Nhập tên sản phảm"
+            value={productName}
+            onChangeText={value => {
+              setProductName(value);
+              setIsValidate(false);
+            }}
+          />
+          <MyTextInput
+            placeholder="Nhập chi tiết sản phảm"
+            value={productName}
+            onChangeText={value => {
+              setProductDetail(value);
+              setIsValidate(false);
+            }}
+          />
+          <MyTextInput
+            placeholder="Nhập giá sản phảm"
+            value={productName}
+            onChangeText={value => {
+              setProductPrice(value);
+              setIsValidate(false);
+            }}
+          />
+
+          <MyDropdown
+            isOpen={isOpenDropDown}
+            onPress={() => {
+              setIsOpenDropDown(!isOpenDropDown);
+            }}
+            placeholder="Chọn loại sản phẩm"
+            itemDrops={[
+              {label: 'Milktea', value: 1},
+              {label: 'Cafe', value: 2},
+            ]}
+            showTickIcon
+            onSelectItemValues={values => {
+              setIsOpenDropDown(!isOpenDropDown);
+              setCategory(values);
+            }}
+            value={category}
+          />
+          {isValidate ? (
+            <View
+              style={{
+                height: 50,
+                alignItems: 'center',
+              }}
+            >
+              <Text style={{color: 'red'}}>Vui lòng điền thông tin đầy đủ</Text>
+            </View>
+          ) : (
+            <View style={{height: 50}} />
+          )}
+        </View>
+        <View
+          style={{
+            flex: 2,
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
-        />
+        >
+          <MyButton
+            style={styles.button}
+            text="Lưu"
+            onPress={() => {
+              _AddProduct(
+                productName,
+                productDetail,
+                category,
+                productPrice,
+                quantity,
+              );
+            }}
+          />
+        </View>
       </View>
-    </View>
+    </KeyboardAwareScrollView>
   );
 };
 

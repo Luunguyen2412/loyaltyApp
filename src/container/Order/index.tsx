@@ -23,7 +23,6 @@ import {getListSuccess, isFetching} from './reducer';
 let width = Dimensions.get('window').width;
 
 const dataPayment = {
-  idPayment: 1,
   staff: '',
   totalBill: 0,
   note: '',

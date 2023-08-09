@@ -103,8 +103,9 @@ const LoginScreen: React.FC = ({}) => {
         <Text
           style={{
             padding: 20,
-            fontSize: 20,
+            fontSize: 30,
             fontWeight: 'bold',
+            color: Colors.black,
           }}
         >
           Login Screen
@@ -146,14 +147,14 @@ const LoginScreen: React.FC = ({}) => {
           }}
         />
 
-        <MyButton
+        {/* <MyButton
           style={styles.SignInButton}
           text="Tạo tài khoản"
           textColor={Colors.PRIMARY}
           onPress={() => {
             navigation.navigate('SignUp');
           }}
-        />
+        /> */}
       </View>
     </View>
   );
