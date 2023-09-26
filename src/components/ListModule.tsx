@@ -5,9 +5,6 @@ import {useNavigation} from '@react-navigation/native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {RootState} from '../store';
 import {useSelector} from 'react-redux';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {USER_ID} from '../common/storage';
-import {enableLayoutAnimations} from 'react-native-reanimated';
 
 type MyListModuleProps = {
   listModule: [];

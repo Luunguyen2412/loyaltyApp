@@ -48,6 +48,13 @@ const listModule = [
     icon: 'store',
     permission: 2,
   },
+  {
+    id: 4,
+    name: 'History\nOrder',
+    navigate: 'HistoryOrder',
+    icon: 'clock',
+    permission: 1,
+  },
 ];
 
 const HomeScreen: React.FC = ({}) => {

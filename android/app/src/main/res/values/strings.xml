@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">loyaltyApp</string>
+    <string name="google_map_api_key">AIzaSyBSl_rHUQ4oyB7LSoJFT4E33vcE2-pp0I0</string>
 </resources>

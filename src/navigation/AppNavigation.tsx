@@ -16,6 +16,7 @@ import UpdateEmployee from '../container/Employee/UpdateEmployee';
 import ListProduct from '../container/Product';
 import AddProduct from '../container/Product/AddProduct';
 import BillDetailScreen from '../container/Order/BillDetail';
+import HistoryOrder from '../container/History';
 
 const Stack = createNativeStackNavigator();
 
@@ -184,6 +185,17 @@ const AppNavigator: React.FC = () => {
         component={AddProduct}
         options={{
           title: 'Add Product',
+          headerTintColor: Colors.white,
+          headerStyle: {
+            backgroundColor: Colors.PRIMARY,
+          },
+        }}
+      />
+      <Stack.Screen
+        name="HistoryOrder"
+        component={HistoryOrder}
+        options={{
+          title: 'History Order',
           headerTintColor: Colors.white,
           headerStyle: {
             backgroundColor: Colors.PRIMARY,
