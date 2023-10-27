@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import MyLoader from './components/MyLoader';
 
 const AppContext = React.createContext({});
 export const AppConsumer = AppContext.Consumer;
@@ -23,6 +24,7 @@ export class AppProvider extends Component {
       <AppContext.Provider value={{...funcs}}>
         {this.props.children}
         {/* other global component  */}
+        <MyLoader loading={loading} />
       </AppContext.Provider>
     );
   }

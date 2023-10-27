@@ -35,6 +35,7 @@ const ListEmployee: React.FC = ({}) => {
 
   const fetchData = async () => {
     dispatch(isFetching());
+    global.props.showLoader();
 
     await fetchAPI({
       url: `${urlHost}/api/users`,
@@ -45,6 +46,7 @@ const ListEmployee: React.FC = ({}) => {
         dispatch(getListSuccess());
         setData(responseData);
         setShouldFetchData(false);
+        global.props.hideLoader();
       })
       .catch(error => {
         console.log('errorListUser', error);
