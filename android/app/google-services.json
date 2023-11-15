@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "414849080139",
+    "project_id": "test-ed54b",
+    "storage_bucket": "test-ed54b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:414849080139:android:8b1a114cd18e718f8fa6ce",
+        "android_client_info": {
+          "package_name": "com.loyaltyapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWe1a4grcWHv3vqjuW4XsmfJbhsLYPx5c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
