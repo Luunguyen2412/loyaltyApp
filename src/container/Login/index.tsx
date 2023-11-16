@@ -5,6 +5,7 @@ import {
   Dimensions,
   Text,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import Colors from '../../constants/Colors';
 import MyButton from '../../components/MyButton';
@@ -16,6 +17,7 @@ import {fetchAPI, urlHost} from '../../constants/ApiConstants';
 import {RootState} from '../../store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {KEY_ACCESS_TOKEN, USER_ID} from '../../common/storage';
+import {checkNotifications, openSettings} from 'react-native-permissions';
 
 let width = Dimensions.get('window').width;
 
@@ -85,6 +87,27 @@ const LoginScreen: React.FC = ({}) => {
       });
   };
 
+  const checkPermission = async () => {
+    const permission = await checkNotifications();
+    console.log('permissionnn', permission);
+    if (permission.status === 'granted') {
+      onLogIn();
+    } else {
+      Alert.alert(
+        'Notification',
+        'You do not open notification yet, please open setting',
+        [
+          {
+            text: 'Open Setting',
+            onPress: () => {
+              openSettings();
+            },
+          },
+        ],
+      );
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.content}>
@@ -143,7 +166,7 @@ const LoginScreen: React.FC = ({}) => {
           style={styles.LoginButton}
           text="Đăng nhập"
           onPress={() => {
-            onLogIn();
+            checkPermission();
           }}
         />
 

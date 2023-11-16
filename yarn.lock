@@ -1166,8 +1166,6 @@
   version "2.0.17"
   resolved "https://registry.yarnpkg.com/@egjs/hammerjs/-/hammerjs-2.0.17.tgz#5dc02af75a6a06e4c2db0202cae38c9263895124"
   integrity sha512-XQsZgjm2EcVUiZQf11UBJQfmZeEmOW8DpI1gsFeln6w0ae0ii4dMQEQ0kjl6DspdWX1aGY1/loyXnP0JS06e/A==
-  dependencies:
-    "@types/hammerjs" "^2.0.36"
 
 "@eslint-community/eslint-utils@^4.2.0":
   version "4.4.0"
@@ -2226,11 +2224,6 @@
   integrity sha512-MhzcwU8aUygZroVwL2jeYk6JisJrPl/oov/gsgGCue9mkgl9wjGbzReYQClxiUgFDnib9FuHqTndccKeZKxTRw==
   dependencies:
     "@types/node" "*"
-
-"@types/hammerjs@^2.0.36":
-  version "2.0.42"
-  resolved "https://registry.yarnpkg.com/@types/hammerjs/-/hammerjs-2.0.42.tgz#d7a53edbc51b2c13a9a759c45d7b5e61243d7dba"
-  integrity sha512-Xxk14BrwHnGi0xlURPRb+Y0UNn2w3cTkeFm7pKMsYOaNgH/kabbJLhcBoNIodwsbTz7Z8KcWjtDvlGH0nc0U9w==
 
 "@types/hoist-non-react-statics@^3.3.1":
   version "3.3.3"
@@ -7183,6 +7176,13 @@ pkg-dir@^4.2.0:
   dependencies:
     find-up "^4.0.0"
 
+pkg-dir@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/pkg-dir/-/pkg-dir-5.0.0.tgz#a02d6aebe6ba133a928f74aec20bafdfe6b8e760"
+  integrity sha512-NPE8TDbzl/3YQYY7CSS228s3g2ollTFnc+Qi3tqmqJp9Vg2ovUpixcJEo2HJScN2Ez+kEaal6y70c0ehqJBJeA==
+  dependencies:
+    find-up "^5.0.0"
+
 plist@^3.0.5:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/plist/-/plist-3.1.0.tgz#797a516a93e62f5bde55e0b9cc9c967f860893c9"
@@ -7441,6 +7441,14 @@ react-native-maps@^1.7.1:
   integrity sha512-KfVZ03L42+a22Fkcl2uDe5d+73BweTlcRUzm2G+aQUJ7fHrBxj7CuXWtKMSNpVDiO3YDCWcshiiyjSXxkd/qOw==
   dependencies:
     "@types/geojson" "^7946.0.10"
+
+react-native-permissions@3.8.1:
+  version "3.8.1"
+  resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-3.8.1.tgz#8d38578686e77caf6e7faf7568411da98ab12d89"
+  integrity sha512-5e5y4RyyWAD3UCrPO70x0a8opk70RYzU3GI6xPjq/7LuIbFprSzWbOvM9lLD8SSzf/8ofCwDm29evvPYllGS+g==
+  dependencies:
+    picocolors "^1.0.0"
+    pkg-dir "^5.0.0"
 
 react-native-push-notification@^8.1.1:
   version "8.1.1"

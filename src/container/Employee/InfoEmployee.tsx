@@ -9,14 +9,13 @@ import {
   Text,
 } from 'react-native';
 import Colors from '../../constants/Colors';
-import MyTextInput from '../../components/MyTextInput';
 import MyButton from '../../components/MyButton';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {fetchAPI, urlHost} from '../../constants/ApiConstants';
 import {getUserSuccess, isFetching} from './reducer';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../store';
-import {useFocusEffect} from '@react-navigation/native';
+import MyBoxText from '../../components/MyBoxText';
 
 let width = Dimensions.get('window').width;
 
@@ -136,31 +135,12 @@ const InfoEmployee: React.FC = ({}) => {
                     resizeMode="contain"
                   />
                 </View>
-                <MyTextInput
-                  placeholder={'Họ tên'}
-                  value={dataUser.username}
-                  editable={false}
-                />
-                <MyTextInput
-                  placeholder={'Số điện thoại'}
-                  value={dataUser.phone}
-                  editable={false}
-                />
-                <MyTextInput
-                  placeholder="Vị trí của bạn"
-                  value={position}
-                  editable={false}
-                />
-                <MyTextInput
-                  placeholder="Chọn giới tính của bạn"
-                  value={gender}
-                  editable={false}
-                />
-                <MyTextInput
-                  placeholder="Địa chỉ của bạn"
-                  value={dataUser.address}
-                  editable={false}
-                />
+
+                <MyBoxText title={dataUser.username || 'Họ tên'} />
+                <MyBoxText title={dataUser.phone || 'Số điện thoại'} />
+                <MyBoxText title={position || 'Vị trí của bạn'} />
+                <MyBoxText title={dataUser.address || 'Địa chỉ của bạn'} />
+                <MyBoxText title={gender || 'Giới tính của bạn'} />
               </View>
               <View
                 style={{
