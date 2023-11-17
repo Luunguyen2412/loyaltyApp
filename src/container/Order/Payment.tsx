@@ -118,16 +118,29 @@ const PaymentScreen: React.FC = () => {
   const getListCustomers = async () => {
     // dispatch(isFetching());
 
+    // await fetchAPI({
+    //   url: `${urlHost}/api/contacts`,
+    //   method: 'GET',
+    // })
+    //   .then(async responseData => {
+    //     console.log('responseListContacts', responseData);
+    //     setListCustomers(responseData);
+    //   })
+    //   .catch(error => {
+    //     console.log('errorListContacts', error);
+    //   });
+
     await fetchAPI({
-      url: `${urlHost}/api/contacts`,
+      url: `${urlHost}/api/users`,
       method: 'GET',
     })
       .then(async responseData => {
-        console.log('responseListContacts', responseData);
+        console.log('responseListUser', responseData);
         setListCustomers(responseData);
+        global.props.hideLoader();
       })
       .catch(error => {
-        console.log('errorListContacts', error);
+        console.log('errorListUser', error);
       });
   };
 
@@ -146,7 +159,7 @@ const PaymentScreen: React.FC = () => {
       >
         <Text
           style={{color: Colors.black, fontSize: 16, fontWeight: '500'}}
-        >{`${item.name} - ${item.phone}`}</Text>
+        >{`${item.username} - ${item.phone}`}</Text>
       </TouchableOpacity>
     );
   };
@@ -346,7 +359,7 @@ const PaymentScreen: React.FC = () => {
                   fontSize: 16,
                   fontWeight: '500',
                 }}
-              >{`${selectedCustomer.name} - ${selectedCustomer.phone}`}</Text>
+              >{`${selectedCustomer.username} - ${selectedCustomer.phone}`}</Text>
             </View>
           )}
           <MyButton

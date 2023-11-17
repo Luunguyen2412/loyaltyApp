@@ -1,53 +1,74 @@
-import PushNotificationIOS from '@react-native-community/push-notification-ios';
-import PushNotification from 'react-native-push-notification';
+import firebase from '@react-native-firebase/app';
+import messaging from '@react-native-firebase/messaging';
+import PushNotification, {Importance} from 'react-native-push-notification';
 
-// Must be outside of any component LifeCycle (such as `componentDidMount`).
-PushNotification.configure({
-  // (optional) Called when Token is generated (iOS and Android)
-  onRegister: function(token) {
-    console.log('TOKEN:', token);
-  },
+export default class NotifService {
+  constructor(props) {
+    super(props);
+  }
 
-  // (required) Called when a remote is received or opened, or local notification is opened
-  onNotification: function(notification) {
-    console.log('NOTIFICATION:', notification);
+  createChannel = channelId => {
+    PushNotification.createChannel(
+      {
+        channelId: channelId, // (required)
+        channelName: 'My channel', // (required)
+        channelDescription: 'A channel to categorise your notifications', // (optional) default: undefined.
+        playSound: false, // (optional) default: true
+        soundName: 'default', // (optional) See `soundName` parameter of `localNotification` function
+        importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
+        vibrate: true, // (optional) default: true. Creates the default vibration pattern if true.
+      },
+      created => console.log(`createChannel returned '${created}'`), // (optional) callback returns whether the channel was created, false means it already existed.
+    );
+  };
 
-    // process the notification
+  showNotification = (channelId, options) => {
+    PushNotification.localNotification({
+      /* Android Only Properties */
+      channelId: channelId, // (required) channelId, if the channel doesn't exist, notification will not trigger.
+      largeIconUrl: 'ic_launcher', // (optional) default: undefined
+      smallIcon: 'ic_notification', // (optional) default: "ic_notification" with fallback for "ic_launcher". Use "" for default small icon.
+      bigText: 'My big text that will be shown when notification is expanded. ', // (optional) default: "message" prop
+      subText: 'This is a subText', // (optional) default: none
+      bigPictureUrl: '', // (optional) default: undefined
+      bigLargeIcon: '', // (optional) default: undefined
+      bigLargeIconUrl: '', // (optional) default: undefined
+      color: 'red', // (optional) default: system default
+      vibrate: true, // (optional) default: true
+      vibration: 300, // vibration length in milliseconds, ignored if vibrate=false, default: 1000
+      ongoing: false, // (optional) set whether this is an "ongoing" notification
+      priority: 'high', // (optional) set notification priority, default: high
+      actions: ['Yes', 'No'], // (Android only) See the doc for notification actions to know more
+      invokeApp: true, // (optional) This enable click on actions to bring back the application to foreground or stay in background, default: true
 
-    // (required) Called when a remote is received or opened, or local notification is opened
-    // notification.finish(PushNotificationIOS.FetchResult.NoData);
-  },
+      title: options.title, // (optional)
+      message: options.message, // (required)
+    });
+  };
 
-  // (optional) Called when Registered Action is pressed and invokeApp is false, if true onNotification will be called (Android)
-  onAction: function(notification) {
-    console.log('ACTION:', notification.action);
-    console.log('NOTIFICATION:', notification);
+  componentDidMount() {
+    messaging()
+      .getToken(firebase.app().options.messagingSenderId)
+      .then(token => {
+        console.log('tokennnn', token);
+      });
 
-    // process the action
-  },
+    const unsubscribe = messaging().onMessage(async remoteMsg => {
+      const channelId = Math.random()
+        .toString(36)
+        .substring(7);
+      this.createChannel(channelId);
+      this.showNotification(channelId, {
+        // bigImage: remoteMsg.notification?.android?.imageUrl,
+        title: remoteMsg.notification?.title,
+        message: remoteMsg.notification?.body,
+      });
+      console.log('remoteMsg ', remoteMsg);
+    });
+    messaging().setBackgroundMessageHandler(async remoteMsg => {
+      console.log('remoteMsg Background ', remoteMsg);
+    });
 
-  // (optional) Called when the user fails to register for remote notifications. Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
-  onRegistrationError: function(err) {
-    console.error(err.message, err);
-  },
-
-  // IOS ONLY (optional): default: all - Permissions to register.
-  // permissions: {
-  //   alert: true,
-  //   badge: true,
-  //   sound: true,
-  // },
-
-  // Should the initial notification be popped automatically
-  // default: true
-  popInitialNotification: true,
-
-  /**
-   * (optional) default: true
-   * - Specified if permissions (ios) and token (android and ios) will requested or not,
-   * - if not, you must call PushNotificationsHandler.requestPermissions() later
-   * - if you are not using remote notification or do not have Firebase installed, use this:
-   *     requestPermissions: Platform.OS === 'ios'
-   */
-  requestPermissions: true,
-});
+    return unsubscribe;
+  }
+}
